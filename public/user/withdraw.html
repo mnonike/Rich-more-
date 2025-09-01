@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rich More Now - Withdrawal History</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0d60d8;
+            --primary-light: #e6f0fd;
+            --primary-dark: #0a4eb0;
+            --secondary-color: #f8f9fa;
+            --text-color: #333;
+            --text-light: #666;
+            --background-color: #ffffff;
+            --card-bg: #ffffff;
+            --border-color: #e0e0e0;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            --nav-height: 70px;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #4a90e2;
+            --primary-light: #1a2d4a;
+            --primary-dark: #3a7bc8;
+            --secondary-color: #2d2d2d;
+            --text-color: #f0f0f0;
+            --text-light: #aaa;
+            --background-color: #1e1e1e;
+            --card-bg: #2d2d2d;
+            --border-color: #444;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            --success-color: #2ecc71;
+            --warning-color: #f1c40f;
+            --danger-color: #e74c3c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding-bottom: var(--nav-height);
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        .header {
+            padding: 25px 0 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        /* Withdrawal Card */
+        .withdrawal-card {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--primary-color);
+            font-size: 24px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .card-description {
+            color: var(--text-light);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .eligibility-badge {
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: var(--success-color);
+            color: white;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .not-eligible {
+            background-color: var(--warning-color);
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .detail-label {
+            color: var(--text-light);
+        }
+
+        .detail-value {
+            font-weight: 600;
+        }
+
+        .highlight-value {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .withdrawal-history {
+            margin-top: 30px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .history-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .history-item {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .history-date {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 5px;
+        }
+
+        .history-amount {
+            font-weight: 700;
+            color: var(--success-color);
+        }
+
+        .status-pending {
+            color: var(--warning-color);
+        }
+
+        .status-completed {
+            color: var(--success-color);
+        }
+
+        .status-rejected {
+            color: var(--danger-color);
+        }
+
+        .receipt-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed var(--border-color);
+        }
+
+        .receipt-image {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .receipt-image:hover {
+            transform: scale(1.02);
+        }
+
+        .receipt-message {
+            font-style: italic;
+            color: var(--text-light);
+            margin: 10px 0;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border-radius: 6px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow: auto;
+        }
+
+        .modal-image {
+            max-width: 100%;
+            max-height: 70vh;
+            border-radius: 8px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+        }
+
+        /* Toast Messages */
+        .toast-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1100;
+            animation: slideIn 0.3s, fadeOut 0.5s 2.5s forwards;
+        }
+
+        .toast-message.success {
+            background-color: var(--success-color);
+        }
+
+        .toast-message.error {
+            background-color: var(--danger-color);
+        }
+
+        @keyframes slideIn {
+            from { top: -50px; opacity: 0; }
+            to { top: 20px; opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: var(--nav-height);
+            background-color: var(--background-color);
+            box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.08);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-light);
+            font-size: 11px;
+            font-weight: 500;
+            flex: 1;
+            padding: 8px 0;
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .nav-icon {
+            font-size: 22px;
+            margin-bottom: 3px;
+        }
+
+        .nav-plus {
+            background-color: var(--primary-color);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-top: -25px;
+            box-shadow: 0 4px 15px rgba(13, 96, 216, 0.3);
+            border: 3px solid var(--background-color);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 400px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .withdrawal-card {
+                padding: 20px;
+            }
+
+            .card-title {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="container">
+        <div class="header">
+            <div class="page-title">Withdrawal History</div>
+        </div>
+
+        <!-- Withdrawal Card -->
+        <div class="withdrawal-card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <i class="fas fa-hand-holding-usd"></i>
+                </div>
+                <div>
+                    <div class="card-title">6-Month Savings Plan</div>
+                    <div class="eligibility-badge" id="eligibilityBadge">
+                        <i class="fas fa-check"></i> Loading Eligibility...
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-description" id="planDescription">
+                Checking your savings plan progress...
+            </div>
+
+            <div class="detail-item">
+                <span class="detail-label">Total Invested</span>
+                <span class="detail-value" id="totalInvested">₦0</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Final Return</span>
+                <span class="detail-value highlight-value">₦100,000</span>
+            </div>
+
+            <!-- Withdrawal History -->
+            <div class="withdrawal-history">
+                <div class="history-title">Your Withdrawals</div>
+                <div id="withdrawalHistory">
+                    <!-- Withdrawals will be inserted here by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Receipt Modal -->
+    <div class="modal" id="receiptModal">
+        <span class="close-modal">&times;</span>
+        <div class="modal-content">
+            <img id="modalImage" class="modal-image" src="" alt="Receipt">
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="/dashboard" class="nav-item">
+            <i class="fas fa-home nav-icon"></i>
+            <span>Home</span>
+        </a>
+        <a href="/transactions" class="nav-item">
+            <i class="fas fa-exchange-alt nav-icon"></i>
+            <span>Transactions</span>
+        </a>
+        <a href="/save" class="nav-item">
+            <div class="nav-plus">
+                <i class="fas fa-plus"></i>
+            </div>
+            <span>Save</span>
+        </a>
+        <a href="/withdraw" class="nav-item active">
+            <i class="fas fa-receipt nav-icon"></i>
+            <span>withdrawal history</span>
+        </a>
+        <a href="/profile" class="nav-item">
+            <i class="fas fa-user nav-icon"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <script>
+// Constants
+const MONTHLY_PAYMENT = 12000; // ₦12,000 per month
+const TOTAL_MONTHS = 6; // 6-month plan
+
+// DOM Elements
+const eligibilityBadge = document.getElementById('eligibilityBadge');
+const planDescription = document.getElementById('planDescription');
+const totalInvestedEl = document.getElementById('totalInvested');
+const withdrawalHistory = document.getElementById('withdrawalHistory');
+const receiptModal = document.getElementById('receiptModal');
+const modalImage = document.getElementById('modalImage');
+const closeModal = document.querySelector('.close-modal');
+
+// Modal functionality
+closeModal.addEventListener('click', () => {
+    receiptModal.style.display = 'none';
+});
+
+window.addEventListener('click', (e) => {
+    if (e.target === receiptModal) {
+        receiptModal.style.display = 'none';
+    }
+});
+
+// Open receipt modal
+function openReceiptModal(imageSrc) {
+    modalImage.src = imageSrc;
+    receiptModal.style.display = 'flex';
+}
+
+// Confirm or reject withdrawal
+async function confirmWithdrawal(withdrawalId, isConfirmed) {
+    try {
+        const token = localStorage.getItem('rmn_token');
+        if (!token) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        const response = await fetch(`/api/withdrawals/${withdrawalId}/confirm`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                confirmed: isConfirmed,
+                note: isConfirmed ? 'Confirmed by user' : 'Rejected by user'
+            })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.error || 'Failed to confirm withdrawal');
+        }
+
+        // Show success message
+        const toastMessage = document.createElement('div');
+        toastMessage.className = `toast-message ${isConfirmed ? 'success' : 'error'}`;
+        toastMessage.innerHTML = `
+            <i class="fas ${isConfirmed ? 'fa-check-circle' : 'fa-times-circle'}"></i>
+            Withdrawal ${isConfirmed ? 'confirmed' : 'rejected'} successfully
+        `;
+        document.body.appendChild(toastMessage);
+        
+        // Remove toast after 3 seconds
+        setTimeout(() => {
+            toastMessage.remove();
+        }, 3000);
+
+        // If confirmed, redirect to dashboard with confirmation parameter
+        if (isConfirmed) {
+            setTimeout(() => {
+                window.location.href = '/dashboard?withdrawalConfirmed=true';
+            }, 1000);
+        } else {
+            loadWithdrawalData(); // Refresh the data
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        const toastMessage = document.createElement('div');
+        toastMessage.className = 'toast-message error';
+        toastMessage.innerHTML = `
+            <i class="fas fa-exclamation-circle"></i>
+            ${error.message || 'Failed to process confirmation'}
+        `;
+        document.body.appendChild(toastMessage);
+        
+        // Remove toast after 3 seconds
+        setTimeout(() => {
+            toastMessage.remove();
+        }, 3000);
+    }
+}
+
+// Main function to load withdrawal data
+async function loadWithdrawalData() {
+    try {
+        const token = localStorage.getItem('rmn_token');
+        if (!token) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        // Fetch all required data
+        const [dashboardRes, withdrawalsRes] = await Promise.all([
+            fetch('/api/dashboard', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            }),
+            fetch('/api/withdrawals', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
+        ]);
+
+        const dashboardData = await dashboardRes.json();
+        const withdrawals = await withdrawalsRes.json();
+
+        if (!dashboardRes.ok) {
+            throw new Error(dashboardData.error || 'Failed to load dashboard data');
+        }
+
+        // Calculate eligibility
+        const totalPaid = dashboardData.totalSaved || 0;
+        const monthsCompleted = Math.floor(totalPaid / MONTHLY_PAYMENT);
+        const isEligible = monthsCompleted >= TOTAL_MONTHS;
+
+        // Update UI
+        updateEligibilityUI(isEligible, monthsCompleted, totalPaid);
+        updateWithdrawalHistory(withdrawals);
+
+    } catch (error) {
+        console.error('Error:', error);
+        eligibilityBadge.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error loading data';
+        eligibilityBadge.classList.add('not-eligible');
+        planDescription.textContent = 'Could not load your savings plan information. Please try again later.';
+    }
+}
+
+// Update eligibility UI
+function updateEligibilityUI(isEligible, monthsCompleted, totalPaid) {
+    // Update investment amount
+    totalInvestedEl.textContent = `₦${totalPaid.toLocaleString()}`;
+
+    if (isEligible) {
+        // User is eligible
+        eligibilityBadge.innerHTML = '<i class="fas fa-check"></i> Plan Completed';
+        eligibilityBadge.classList.remove('not-eligible');
+        planDescription.textContent = 'Congratulations! You have completed your 6-month savings plan.';
+    } else {
+        // User is not yet eligible
+        const monthsLeft = TOTAL_MONTHS - monthsCompleted;
+        eligibilityBadge.innerHTML = `<i class="fas fa-clock"></i> ${monthsLeft} Month${monthsLeft !== 1 ? 's' : ''} Remaining`;
+        eligibilityBadge.classList.add('not-eligible');
+        planDescription.textContent = `You need to complete ${monthsLeft} more month${monthsLeft !== 1 ? 's' : ''} of payments.`;
+    }
+}
+
+// Update withdrawal history
+function updateWithdrawalHistory(withdrawals) {
+    withdrawalHistory.innerHTML = '';
+
+    if (!withdrawals || withdrawals.length === 0) {
+        withdrawalHistory.innerHTML = '<div class="history-item">No withdrawals processed yet</div>';
+        return;
+    }
+
+    // Sort by date (newest first)
+    withdrawals.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    withdrawals.forEach(withdrawal => {
+        const item = document.createElement('div');
+        item.className = 'history-item';
+        
+        const date = new Date(withdrawal.date).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        const statusClass = withdrawal.status === 'completed' ? 'status-completed' :
+                          withdrawal.status === 'pending' ? 'status-pending' :
+                          withdrawal.status === 'rejected' ? 'status-rejected' : '';
+
+        item.innerHTML = `
+            <div class="history-date">${date}</div>
+            <div class="history-amount ${statusClass}">
+                ₦${withdrawal.amount?.toLocaleString() || '0'}
+                <i class="fas ${withdrawal.status === 'completed' ? 'fa-check-circle' : 
+                               withdrawal.status === 'rejected' ? 'fa-times-circle' : 'fa-clock'}"></i>
+            </div>
+            <div>${withdrawal.description || 'Savings plan withdrawal'}</div>
+        `;
+
+        // Add receipt section if receipt exists
+        if (withdrawal.receiptImage) {
+            const receiptSection = document.createElement('div');
+            receiptSection.className = 'receipt-section';
+            
+            // Check if image exists
+            const img = new Image();
+            img.src = `/uploads/${withdrawal.receiptImage}`;
+            
+            img.onload = () => {
+                // Image exists, show it
+                let receiptHTML = `
+                    <div class="receipt-message">${withdrawal.adminMessage || 'Receipt uploaded for your confirmation'}</div>
+                    <img src="/uploads/${withdrawal.receiptImage}" 
+                         alt="Withdrawal receipt" 
+                         class="receipt-image"
+                         onclick="openReceiptModal('/uploads/${withdrawal.receiptImage}')">
+                `;
+
+                // Add confirmation buttons if withdrawal is pending
+                if (withdrawal.status === 'pending') {
+                    receiptHTML += `
+                        <div class="action-buttons">
+                            <button class="btn btn-success" onclick="confirmWithdrawal('${withdrawal.id}', true)">
+                                <i class="fas fa-check"></i> Confirm
+                            </button>
+                            <button class="btn btn-danger" onclick="confirmWithdrawal('${withdrawal.id}', false)">
+                                <i class="fas fa-times"></i> Reject
+                            </button>
+                        </div>
+                    `;
+                }
+
+                receiptSection.innerHTML = receiptHTML;
+                item.appendChild(receiptSection);
+            };
+            
+            img.onerror = () => {
+                // Image doesn't exist, don't show the receipt section
+                console.log('Receipt image not found:', withdrawal.receiptImage);
+            };
+        }
+
+        withdrawalHistory.appendChild(item);
+    });
+}
+
+// Initialize when page loads
+window.addEventListener('DOMContentLoaded', () => {
+    // Set up theme detection
+    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+    if (prefersDarkScheme.matches) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    }
+    prefersDarkScheme.addEventListener('change', e => {
+        document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+    });
+
+    // Load withdrawal data
+    loadWithdrawalData();
+});
+
+// Make functions available globally
+window.openReceiptModal = openReceiptModal;
+window.confirmWithdrawal = confirmWithdrawal;
+    </script>
+</body>
+</html>

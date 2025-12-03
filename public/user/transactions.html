@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rich More Now - Transaction History</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0d60d8;
+            --primary-light: #e6f0fd;
+            --primary-dark: #0a4eb0;
+            --secondary-color: #f8f9fa;
+            --text-color: #333;
+            --text-light: #666;
+            --background-color: #ffffff;
+            --card-bg: #ffffff;
+            --border-color: #e0e0e0;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            --nav-height: 70px;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --error-color: #e74c3c;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #4a90e2;
+            --primary-light: #1a2d4a;
+            --primary-dark: #3a7bc8;
+            --secondary-color: #2d2d2d;
+            --text-color: #f0f0f0;
+            --text-light: #aaa;
+            --background-color: #1e1e1e;
+            --card-bg: #2d2d2d;
+            --border-color: #444;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            --success-color: #2ecc71;
+            --warning-color: #f1c40f;
+            --error-color: #e74c3c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding-bottom: var(--nav-height);
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        .header {
+            padding: 25px 0 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        /* Live Status */
+        .live-status {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            color: var(--success-color);
+            margin-top: 5px;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--success-color);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            margin: 15px 0;
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+            scrollbar-width: none;
+        }
+
+        .filter-section::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-button {
+            padding: 8px 15px;
+            border-radius: 20px;
+            background-color: var(--secondary-color);
+            color: var(--text-light);
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .filter-button.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .filter-button:hover:not(.active) {
+            background-color: var(--border-color);
+        }
+
+        /* Transaction List */
+        .transaction-list {
+            margin: 20px 0;
+        }
+
+        .transaction-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .transaction-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .transaction-card.new {
+            animation: highlight 1s ease;
+            border-left: 4px solid var(--success-color);
+        }
+
+        .transaction-card.updated {
+            animation: pulseHighlight 1s ease;
+        }
+
+        .transaction-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--primary-color);
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .transaction-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .transaction-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .transaction-date {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .transaction-amount {
+            font-weight: 700;
+            font-size: 16px;
+            white-space: nowrap;
+            margin-left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status-pending {
+            color: var(--warning-color);
+        }
+
+        .status-completed {
+            color: var(--success-color);
+        }
+
+        .status-failed {
+            color: var(--error-color);
+        }
+
+        /* Live Update Indicator */
+        .live-update-indicator {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: var(--success-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            z-index: 1000;
+            animation: slideDown 0.3s ease;
+            display: none;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--text-light);
+        }
+
+        .empty-state i {
+            font-size: 40px;
+            margin-bottom: 15px;
+            opacity: 0.3;
+        }
+
+        /* Loading State */
+        .loading-state {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: var(--nav-height);
+            background-color: var(--background-color);
+            box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.08);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-light);
+            font-size: 11px;
+            font-weight: 500;
+            flex: 1;
+            padding: 8px 0;
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .nav-icon {
+            font-size: 22px;
+            margin-bottom: 3px;
+        }
+
+        .nav-plus {
+            background-color: var(--primary-color);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-top: -25px;
+            box-shadow: 0 4px 15px rgba(13, 96, 216, 0.3);
+            border: 3px solid var(--background-color);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(-100%); opacity: 0; }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes highlight {
+            0% { background-color: rgba(39, 174, 96, 0.1); }
+            100% { background-color: transparent; }
+        }
+
+        @keyframes pulseHighlight {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 400px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .transaction-card {
+                padding: 12px;
+            }
+
+            .transaction-icon {
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
+                margin-right: 10px;
+            }
+
+            .transaction-amount {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="container">
+        <div class="header">
+            <button class="back-button" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <div>
+                <div class="page-title">Transaction History</div>
+                <div class="live-status" id="liveStatus">
+                    <div class="live-dot"></div>
+                    <span>Live Updates</span>
+                </div>
+            </div>
+            <div style="width: 40px;"></div> <!-- Spacer for alignment -->
+        </div>
+
+        <!-- Live Update Indicator -->
+        <div class="live-update-indicator" id="liveUpdateIndicator">
+            <i class="fas fa-sync-alt"></i> New Transaction
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <button class="filter-button active" onclick="filterTransactions('all')">All</button>
+            <button class="filter-button" onclick="filterTransactions('payment')">Payments</button>
+            <button class="filter-button" onclick="filterTransactions('withdrawal')">Withdrawals</button>
+            <button class="filter-button" onclick="filterTransactions('completed')">Completed</button>
+            <button class="filter-button" onclick="filterTransactions('pending')">Pending</button>
+            <button class="filter-button" onclick="filterTransactions('rejected')">Rejected</button>
+        </div>
+
+        <!-- Transaction List -->
+        <div class="transaction-list" id="transactionList">
+            <!-- Transactions will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="/dashboard" class="nav-item">
+            <i class="fas fa-home nav-icon"></i>
+            <span>Home</span>
+        </a>
+        <a href="/transactions" class="nav-item active">
+            <i class="fas fa-exchange-alt nav-icon"></i>
+            <span>Transactions</span>
+        </a>
+        <a href="/save" class="nav-item">
+            <div class="nav-plus">
+                <i class="fas fa-plus"></i>
+            </div>
+            <span>Save</span>
+        </a>
+        <a href="/withdraw" class="nav-item">
+            <i class="fas fa-receipt nav-icon"></i>
+            <span>Withdrawal</span>
+        </a>
+        <a href="/profile" class="nav-item">
+            <i class="fas fa-user nav-icon"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Socket.IO -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        // Socket.IO connection for real-time updates
+        const socket = io();
+        let currentFilter = 'all';
+        let isLoading = false;
+        let currentPage = 1;
+        let hasMore = true;
+
+        // Connect to user room
+        socket.on('connect', () => {
+            const userData = localStorage.getItem('rmn_user');
+            if (userData) {
+                const user = JSON.parse(userData);
+                socket.emit('join-user-room', user.id);
+                console.log('Connected to real-time server for user:', user.id);
+                updateLiveStatus(true);
+            }
+        });
+
+        socket.on('disconnect', () => {
+            updateLiveStatus(false);
+        });
+
+        // Handle real-time transaction updates
+        socket.on('transactionAdded', (transaction) => {
+            console.log('New transaction:', transaction);
+            addTransactionToUI(transaction, true);
+            showLiveUpdate('New transaction added');
+        });
+
+        socket.on('transactionUpdate', (transaction) => {
+            console.log('Transaction updated:', transaction);
+            updateTransactionInUI(transaction);
+            showLiveUpdate('Transaction updated');
+        });
+
+        socket.on('paymentApproved', (transaction) => {
+            console.log('Payment approved:', transaction);
+            updateTransactionInUI(transaction);
+            showLiveUpdate('Payment approved!');
+        });
+
+        socket.on('paymentRejected', (transaction) => {
+            console.log('Payment rejected:', transaction);
+            updateTransactionInUI(transaction);
+            showLiveUpdate('Payment rejected');
+        });
+
+        socket.on('initialTransactions', (transactions) => {
+            console.log('Initial transactions loaded:', transactions.length);
+            loadTransactionsToUI(transactions);
+        });
+
+        // Update live status indicator
+        function updateLiveStatus(isConnected) {
+            const liveStatus = document.getElementById('liveStatus');
+            const liveDot = liveStatus.querySelector('.live-dot');
+            
+            if (isConnected) {
+                liveStatus.style.color = 'var(--success-color)';
+                liveDot.style.backgroundColor = 'var(--success-color)';
+                liveStatus.innerHTML = '<div class="live-dot"></div><span>Live Updates Active</span>';
+            } else {
+                liveStatus.style.color = 'var(--error-color)';
+                liveDot.style.backgroundColor = 'var(--error-color)';
+                liveStatus.innerHTML = '<div class="live-dot"></div><span>Offline - Reconnecting...</span>';
+            }
+        }
+
+        // Show live update indicator
+        function showLiveUpdate(message) {
+            const indicator = document.getElementById('liveUpdateIndicator');
+            indicator.innerHTML = `<i class="fas fa-sync-alt"></i> ${message}`;
+            indicator.style.display = 'block';
+            
+            setTimeout(() => {
+                indicator.style.animation = 'slideUp 0.3s ease';
+                setTimeout(() => {
+                    indicator.style.display = 'none';
+                    indicator.style.animation = '';
+                }, 300);
+            }, 3000);
+        }
+
+        // Filter transactions
+        function filterTransactions(filter) {
+            currentFilter = filter;
+            currentPage = 1;
+            hasMore = true;
+            
+            // Update active filter button
+            document.querySelectorAll('.filter-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Clear and reload transactions
+            const transactionList = document.getElementById('transactionList');
+            transactionList.innerHTML = '<div class="loading-state"><div class="spinner"></div><div>Loading transactions...</div></div>';
+            
+            loadTransactions(filter);
+        }
+
+        // Load transactions with optional filter
+        async function loadTransactions(filter = 'all', page = 1) {
+            if (isLoading) return;
+            
+            isLoading = true;
+            
+            try {
+                const token = localStorage.getItem('rmn_token');
+                if (!token) {
+                    window.location.href = 'index.html';
+                    return;
+                }
+                
+                let url = `/api/transactions?page=${page}&limit=20`;
+                if (filter !== 'all') {
+                    url += `&type=${filter}`;
+                }
+                
+                const response = await fetch(url, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to load transactions');
+                }
+                
+                const transactionList = document.getElementById('transactionList');
+                
+                if (page === 1) {
+                    transactionList.innerHTML = '';
+                }
+                
+                if (data.transactions.length === 0 && page === 1) {
+                    transactionList.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-exchange-alt"></i>
+                            <p>No transactions yet</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Display transactions
+                data.transactions.forEach(transaction => {
+                    addTransactionToUI(transaction, false);
+                });
+                
+                // Update pagination info
+                hasMore = data.hasMore;
+                currentPage = data.page;
+                
+                // Add load more button if there are more transactions
+                if (hasMore && data.transactions.length > 0) {
+                    const loadMoreBtn = document.createElement('button');
+                    loadMoreBtn.className = 'filter-button';
+                    loadMoreBtn.style.width = '100%';
+                    loadMoreBtn.style.marginTop = '10px';
+                    loadMoreBtn.innerHTML = '<i class="fas fa-chevron-down"></i> Load More';
+                    loadMoreBtn.onclick = () => loadTransactions(filter, currentPage + 1);
+                    transactionList.appendChild(loadMoreBtn);
+                }
+                
+            } catch (error) {
+                console.error('Transactions error:', error);
+                const transactionList = document.getElementById('transactionList');
+                transactionList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>${error.message}</p>
+                        <button class="filter-button" onclick="loadTransactions('${filter}')" style="margin-top: 10px;">
+                            <i class="fas fa-redo"></i> Retry
+                        </button>
+                    </div>
+                `;
+                
+                if (error.message === 'Unauthorized') {
+                    localStorage.removeItem('rmn_token');
+                    window.location.href = 'index.html';
+                }
+            } finally {
+                isLoading = false;
+            }
+        }
+
+        // Add transaction to UI
+        function addTransactionToUI(transaction, isNew = false) {
+            const transactionList = document.getElementById('transactionList');
+            
+            // Check if transaction already exists
+            const existingCard = document.querySelector(`.transaction-card[data-id="${transaction.id}"]`);
+            if (existingCard) {
+                return; // Don't add duplicate
+            }
+            
+            const transactionCard = document.createElement('div');
+            transactionCard.className = `transaction-card ${isNew ? 'new' : ''}`;
+            transactionCard.dataset.id = transaction.id;
+            transactionCard.dataset.type = transaction.type;
+            transactionCard.dataset.status = transaction.status;
+            
+            // Set icon based on type
+            let icon, title;
+            if (transaction.type === 'payment') {
+                icon = 'fa-piggy-bank';
+                title = 'Monthly Payment';
+            } else if (transaction.type === 'withdrawal') {
+                icon = 'fa-hand-holding-usd';
+                title = 'Withdrawal';
+            } else {
+                icon = 'fa-exchange-alt';
+                title = transaction.description || 'Transaction';
+            }
+
+            // Format date
+            const date = new Date(transaction.date).toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric', 
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            // Set status class
+            const statusClass = `status-${transaction.status}`;
+            const statusIcon = transaction.status === 'completed' ? 'fa-check-circle' :
+                             transaction.status === 'pending' ? 'fa-clock' : 'fa-times-circle';
+
+            transactionCard.innerHTML = `
+                <div class="transaction-icon">
+                    <i class="fas ${icon}"></i>
+                </div>
+                <div class="transaction-details">
+                    <div class="transaction-title">${title}</div>
+                    <div class="transaction-date">${date}</div>
+                    ${transaction.description ? `<div class="transaction-date" style="margin-top: 2px;">${transaction.description}</div>` : ''}
+                </div>
+                <div class="transaction-amount ${statusClass}">
+                    <i class="fas ${statusIcon}"></i>
+                    ₦${transaction.amount.toLocaleString()}
+                </div>
+            `;
+            
+            // Add to beginning of list
+            transactionList.prepend(transactionCard);
+            
+            // Filter if needed
+            if (currentFilter !== 'all') {
+                if (currentFilter === 'payment' && transaction.type !== 'payment') {
+                    transactionCard.style.display = 'none';
+                } else if (currentFilter === 'withdrawal' && transaction.type !== 'withdrawal') {
+                    transactionCard.style.display = 'none';
+                } else if (currentFilter === 'completed' && transaction.status !== 'completed') {
+                    transactionCard.style.display = 'none';
+                } else if (currentFilter === 'pending' && transaction.status !== 'pending') {
+                    transactionCard.style.display = 'none';
+                } else if (currentFilter === 'rejected' && transaction.status !== 'rejected') {
+                    transactionCard.style.display = 'none';
+                }
+            }
+            
+            // Remove "no transactions" message if present
+            const emptyState = transactionList.querySelector('.empty-state');
+            if (emptyState) {
+                emptyState.remove();
+            }
+        }
+
+        // Update transaction in UI
+        function updateTransactionInUI(transaction) {
+            const transactionCard = document.querySelector(`.transaction-card[data-id="${transaction.id}"]`);
+            if (!transactionCard) {
+                addTransactionToUI(transaction, true);
+                return;
+            }
+            
+            // Mark as updated
+            transactionCard.classList.add('updated');
+            setTimeout(() => transactionCard.classList.remove('updated'), 1000);
+            
+            // Update status class
+            transactionCard.dataset.status = transaction.status;
+            const amountElement = transactionCard.querySelector('.transaction-amount');
+            amountElement.className = `transaction-amount status-${transaction.status}`;
+            
+            // Update status icon
+            const statusIcon = transaction.status === 'completed' ? 'fa-check-circle' :
+                             transaction.status === 'pending' ? 'fa-clock' : 'fa-times-circle';
+            amountElement.querySelector('i').className = `fas ${statusIcon}`;
+            
+            // Update amount if changed
+            if (transaction.amount) {
+                amountElement.innerHTML = `<i class="fas ${statusIcon}"></i> ₦${transaction.amount.toLocaleString()}`;
+            }
+            
+            // Update description if present
+            if (transaction.description) {
+                const details = transactionCard.querySelector('.transaction-details');
+                let descriptionElement = details.querySelector('.transaction-date:nth-child(3)');
+                if (!descriptionElement) {
+                    descriptionElement = document.createElement('div');
+                    descriptionElement.className = 'transaction-date';
+                    descriptionElement.style.marginTop = '2px';
+                    details.appendChild(descriptionElement);
+                }
+                descriptionElement.textContent = transaction.description;
+            }
+            
+            // Check filter status
+            if (currentFilter !== 'all') {
+                if (currentFilter === 'completed' && transaction.status !== 'completed') {
+                    transactionCard.style.display = 'none';
+                } else if (currentFilter === 'pending' && transaction.status !== 'pending') {
+                    transactionCard.style.display = 'none';
+                } else if (currentFilter === 'rejected' && transaction.status !== 'rejected') {
+                    transactionCard.style.display = 'none';
+                } else {
+                    transactionCard.style.display = '';
+                }
+            }
+        }
+
+        // Load all transactions to UI (for initial load)
+        function loadTransactionsToUI(transactions) {
+            const transactionList = document.getElementById('transactionList');
+            transactionList.innerHTML = '';
+            
+            if (transactions.length === 0) {
+                transactionList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exchange-alt"></i>
+                        <p>No transactions yet</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort by date (newest first)
+            transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // Add all transactions
+            transactions.forEach(transaction => {
+                addTransactionToUI(transaction, false);
+            });
+        }
+
+        // Automatic Theme Detection
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+
+        // Set theme based on system preference
+        if (prefersDarkScheme.matches) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+
+        // Listen for system theme changes
+        prefersDarkScheme.addEventListener('change', e => {
+            if (e.matches) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+            }
+        });
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            loadTransactions('all');
+            
+            // Set up auto-reconnect for socket
+            setInterval(() => {
+                if (!socket.connected) {
+                    socket.connect();
+                }
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

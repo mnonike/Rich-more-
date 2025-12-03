@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rich More Now - Dashboard</title>
+    <style>
+
+        :root {
+            --primary-color: #0d60d8;
+            --primary-light: #e6f0fd;
+            --primary-dark: #0a4eb0;
+            --secondary-color: #f8f9fa;
+            --text-color: #333;
+            --text-light: #666;
+            --background-color: #ffffff;
+            --card-bg: #ffffff;
+            --border-color: #e0e0e0;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            --nav-height: 70px;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --error-color: #e74c3c;
+            --disabled-color: #95a5a6;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #4a90e2;
+            --primary-light: #1a2d4a;
+            --primary-dark: #3a7bc8;
+            --secondary-color: #2d2d2d;
+            --text-color: #f0f0f0;
+            --text-light: #aaa;
+            --background-color: #1e1e1e;
+            --card-bg: #2d2d2d;
+            --border-color: #444;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            --success-color: #2ecc71;
+            --warning-color: #f1c40f;
+            --error-color: #e74c3c;
+            --disabled-color: #7f8c8d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding-bottom: var(--nav-height);
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Notification Banner */
+        .notification-banner {
+            background-color: var(--primary-light);
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .notification-banner.warning {
+            background-color: rgba(243, 156, 18, 0.1);
+            border-left-color: var(--warning-color);
+        }
+
+        .notification-banner.error {
+            background-color: rgba(231, 76, 60, 0.1);
+            border-left-color: var(--error-color);
+        }
+
+        .notification-banner.success {
+            background-color: rgba(39, 174, 96, 0.1);
+            border-left-color: var(--success-color);
+        }
+
+        .notification-icon {
+            color: var(--primary-color);
+            margin-right: 10px;
+            font-size: 20px;
+        }
+
+        .notification-banner.warning .notification-icon {
+            color: var(--warning-color);
+        }
+
+        .notification-banner.error .notification-icon {
+            color: var(--error-color);
+        }
+
+        .notification-banner.success .notification-icon {
+            color: var(--success-color);
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .notification-message {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .countdown-timer {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-top: 5px;
+        }
+
+        /* Header Styles */
+        .header {
+            padding: 25px 0 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .welcome-text {
+            font-size: 14px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .user-name {
+            font-size: 20px;
+            font-weight: 700;
+            margin-top: 5px;
+        }
+
+        .notification-badge {
+            position: relative;
+        }
+
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            border: 2px solid var(--background-color);
+        }
+
+        /* Savings Overview */
+        .savings-overview {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .savings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .savings-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .savings-status {
+            font-size: 14px;
+            padding: 5px 10px;
+            border-radius: 15px;
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .savings-amount {
+            font-size: 36px;
+            font-weight: 800;
+            margin: 15px 0;
+            color: var(--primary-color);
+            text-align: center;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        .savings-progress {
+            margin: 25px 0;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: var(--secondary-color);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 10px;
+            width: 0;
+            transition: width 1s ease-out;
+        }
+
+        .savings-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .action-button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .save-button {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .save-button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .withdraw-button {
+            background-color: var(--disabled-color);
+            color: white;
+            cursor: not-allowed;
+        }
+
+        .withdraw-button.active {
+            background-color: var(--success-color);
+            cursor: pointer;
+        }
+
+        /* Recent Transactions */
+        .transactions-section {
+            margin: 30px 0;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .view-all {
+            font-size: 14px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .transaction-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .transaction-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .transaction-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--primary-color);
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .transaction-details {
+            flex: 1;
+        }
+
+        .transaction-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .transaction-date {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .transaction-amount {
+            font-weight: 700;
+        }
+
+        .status-pending {
+            color: var(--warning-color);
+        }
+
+        .status-completed {
+            color: var(--success-color);
+        }
+
+        .status-rejected {
+            color: var(--error-color);
+        }
+
+        /* Toast Messages */
+        .toast-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1100;
+            max-width: 350px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            animation: slideInRight 0.3s, fadeOut 0.5s 4.5s forwards;
+        }
+
+        .toast-message.success {
+            background-color: var(--success-color);
+        }
+
+        .toast-message.warning {
+            background-color: var(--warning-color);
+        }
+
+        .toast-message.error {
+            background-color: var(--error-color);
+        }
+
+        .toast-message.info {
+            background-color: var(--primary-color);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: var(--nav-height);
+            background-color: var(--background-color);
+            box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.08);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-light);
+            font-size: 11px;
+            font-weight: 500;
+            flex: 1;
+            padding: 8px 0;
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .nav-icon {
+            font-size: 22px;
+            margin-bottom: 3px;
+        }
+
+        .nav-plus {
+            background-color: var(--primary-color);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-top: -25px;
+            box-shadow: 0 4px 15px rgba(13, 96, 216, 0.3);
+            border: 3px solid var(--background-color);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes countUp {
+            from { opacity: 0.5; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 400px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .savings-overview {
+                padding: 20px;
+            }
+
+            .savings-amount {
+                font-size: 32px;
+            }
+
+            .transaction-card {
+                padding: 12px;
+            }
+
+            .toast-message {
+                right: 10px;
+                left: 10px;
+                max-width: none;
+            }
+        }
+    
+
+        /* Live Notification Badge */
+        .live-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #25D366;
+            border-radius: 50%;
+            margin-right: 5px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* Payment Countdown */
+        .payment-countdown {
+            background-color: var(--primary-light);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .countdown-title {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .countdown-display {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .countdown-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .countdown-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+            line-height: 1;
+        }
+
+        .countdown-label {
+            font-size: 10px;
+            color: var(--text-light);
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        .countdown-overdue {
+            color: var(--error-color) !important;
+        }
+
+        .countdown-warning {
+            color: var(--warning-color) !important;
+        }
+
+        /* Penalty Notice */
+        .penalty-notice {
+            background-color: rgba(231, 76, 60, 0.1);
+            border: 1px solid var(--error-color);
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        .penalty-notice i {
+            color: var(--error-color);
+            margin-right: 5px;
+        }
+
+        /* Withdrawal Notification */
+        .withdrawal-notification {
+            background: linear-gradient(135deg, var(--success-color) 0%, #219653 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            animation: pulse 2s infinite;
+        }
+
+        .withdrawal-notification i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Socket.IO Script -->
+    <script src="/socket.io/socket.io.js"></script>
+
+    <!-- Notification Banner -->
+    <div class="container">
+        <div class="notification-banner" id="nextPaymentNotification" style="display: none;">
+            <i class="fas fa-bell notification-icon"></i>
+            <div class="notification-content">
+                <div class="notification-title">Next Payment Due <span class="live-indicator"></span></div>
+                <div class="notification-message" id="nextPaymentMessage"></div>
+            </div>
+        </div>
+
+        <!-- Withdrawal Notification -->
+        <div class="withdrawal-notification" id="withdrawalNotification" style="display: none;">
+            <i class="fas fa-hand-holding-usd"></i>
+            <strong>Withdrawal Ready!</strong> 
+            <span id="withdrawalMessage">Check withdrawal page to confirm receipt</span>
+            <button onclick="window.location.href='/withdraw'" style="margin-left: 10px; background: white; color: var(--success-color); border: none; padding: 5px 10px; border-radius: 5px; font-weight: bold;">
+                Confirm Now
+            </button>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <div class="container">
+        <div class="header">
+            <div class="user-info">
+                <div class="welcome-text">Welcome back</div>
+                <div class="user-name" id="userName">Loading...</div>
+            </div>
+            <div class="notification-badge">
+                <i class="far fa-bell" style="font-size: 22px; color: var(--text-color);"></i>
+                <div class="badge" id="notificationBadge" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- Savings Overview -->
+        <div class="savings-overview">
+            <div class="savings-header">
+                <div class="savings-title">6-Month Savings Plan</div>
+                <div class="savings-status" id="savingsStatus">Month 0/6</div>
+            </div>
+            <div class="savings-amount" id="totalSaved">₦0</div>
+            
+            <!-- Payment Countdown -->
+            <div class="payment-countdown" id="paymentCountdown" style="display: none;">
+                <div class="countdown-title">Next Payment In</div>
+                <div class="countdown-display" id="countdownDisplay">
+                    <!-- Countdown will be inserted here -->
+                </div>
+                <div id="penaltyNotice" class="penalty-notice" style="display: none;">
+                    <!-- Penalty notice will be inserted here -->
+                </div>
+            </div>
+            
+            <div class="savings-progress">
+                <div class="progress-text">
+                    <span>Progress</span>
+                    <span id="progressText">0 of 6 months</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <div class="savings-actions">
+                <div class="action-button save-button" onclick="location.href='/save'">
+                    <i class="fas fa-plus"></i> Make Payment
+                </div>
+                <div class="action-button withdraw-button" id="withdrawButton">
+                    <i class="fas fa-lock"></i> Complete 6 Months
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="transactions-section">
+            <div class="section-header">
+                <div class="section-title">Recent Transactions <span class="live-indicator"></span></div>
+                <a href="/transactions" class="view-all">View All</a>
+            </div>
+            <div class="transaction-list" id="transactionList">
+                <!-- Transactions will be inserted here by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="/dashboard" class="nav-item active">
+            <i class="fas fa-home nav-icon"></i>
+            <span>Home</span>
+        </a>
+        <a href="/transactions" class="nav-item">
+            <i class="fas fa-exchange-alt nav-icon"></i>
+            <span>Transactions</span>
+        </a>
+        <a href="/save" class="nav-item">
+            <div class="nav-plus">
+                <i class="fas fa-plus"></i>
+            </div>
+            <span>Save</span>
+        </a>
+        <a href="/withdraw" class="nav-item">
+            <i class="fas fa-receipt nav-icon"></i>
+            <span>Withdrawal</span>
+        </a>
+        <a href="/profile" class="nav-item">
+            <i class="fas fa-user nav-icon"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+// Socket.IO connection
+const socket = io();
+
+// Automatic Theme Detection
+const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+const MONTHLY_PAYMENT_AMOUNT = 12000;
+
+// Set theme based on system preference
+if (prefersDarkScheme.matches) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+}
+
+// Listen for system theme changes
+prefersDarkScheme.addEventListener('change', e => {
+    if (e.matches) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+        document.documentElement.removeAttribute('data-theme');
+    }
+});
+
+// Join user room when connected
+socket.on('connect', () => {
+    console.log('Connected to server');
+    const userData = JSON.parse(localStorage.getItem('rmn_user') || '{}');
+    if (userData.id) {
+        socket.emit('join-user-room', userData.id);
+    }
+});
+
+// Listen for notifications
+socket.on('notification', (notification) => {
+    console.log('New notification:', notification);
+    showNotification(notification);
+    
+    // Update notification badge
+    const badge = document.getElementById('notificationBadge');
+    if (badge) {
+        badge.style.display = 'block';
+    }
+    
+    // If it's a withdrawal notification, show withdrawal banner
+    if (notification.type === 'withdrawal') {
+        showWithdrawalNotification(notification);
+    }
+    
+    // If it's a payment-related notification, refresh data
+    if (notification.type.includes('payment')) {
+        loadDashboardData();
+    }
+});
+
+// Listen for withdrawal updates
+socket.on('withdrawalCreated', (withdrawal) => {
+    console.log('New withdrawal created:', withdrawal);
+    showWithdrawalNotification({
+        title: '💸 Withdrawal Processed',
+        message: `Your withdrawal of ₦${withdrawal.amount.toLocaleString()} is ready for confirmation`,
+        type: 'withdrawal'
+    });
+    
+    // Refresh dashboard to update status
+    setTimeout(() => {
+        loadDashboardData();
+    }, 1000);
+});
+
+// Show withdrawal notification
+function showWithdrawalNotification(notification) {
+    const notificationDiv = document.getElementById('withdrawalNotification');
+    const messageSpan = document.getElementById('withdrawalMessage');
+    
+    if (notification.message) {
+        messageSpan.textContent = notification.message;
+    }
+    
+    notificationDiv.style.display = 'block';
+    
+    // Check if user has completed 6 months
+    checkWithdrawalEligibility();
+}
+
+// Show notification as toast
+function showNotification(notification) {
+    const toast = document.createElement('div');
+    toast.className = 'toast-message';
+    toast.style.backgroundColor = notification.type === 'payment_reminder' ? 'var(--warning-color)' :
+                                 notification.type === 'payment_overdue' ? 'var(--error-color)' :
+                                 notification.type === 'payment_due' ? 'var(--primary-color)' : 
+                                 notification.type === 'withdrawal' ? 'var(--success-color)' : 'var(--success-color)';
+    
+    toast.innerHTML = `
+        <i class="fas ${getNotificationIcon(notification.type)}"></i>
+        <div>
+            <div style="font-weight: 700; margin-bottom: 2px;">${notification.title}</div>
+            <div style="font-size: 12px; opacity: 0.9;">${notification.message}</div>
+        </div>
+    `;
+    
+    document.body.appendChild(toast);
+    
+    // Remove after 5 seconds
+    setTimeout(() => {
+        toast.remove();
+    }, 5000);
+}
+
+// Get icon for notification type
+function getNotificationIcon(type) {
+    switch(type) {
+        case 'payment_reminder': return 'fa-clock';
+        case 'payment_overdue': return 'fa-exclamation-triangle';
+        case 'payment_due': return 'fa-calendar-day';
+        case 'payment': return 'fa-money-bill-wave';
+        case 'withdrawal': return 'fa-hand-holding-usd';
+        case 'referral': return 'fa-user-plus';
+        default: return 'fa-bell';
+    }
+}
+
+// Show toast message
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = 'toast-message';
+    toast.style.backgroundColor = type === 'error' ? 'var(--error-color)' : 
+                                 type === 'success' ? 'var(--success-color)' : 
+                                 type === 'warning' ? 'var(--warning-color)' : 'var(--primary-color)';
+    toast.innerHTML = `<i class="fas fa-info-circle"></i> ${message}`;
+    
+    document.body.appendChild(toast);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
+
+// Calculate completed months from total paid amount
+function calculateCompletedMonths(totalPaid) {
+    return Math.floor(totalPaid / MONTHLY_PAYMENT_AMOUNT);
+}
+
+// Animate number counting
+function animateValue(element, start, end, duration) {
+    let startTimestamp = null;
+    const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        const value = Math.floor(progress * (end - start) + start);
+        element.textContent = `₦${value.toLocaleString()}`;
+        element.style.animation = 'countUp 0.3s ease';
+        
+        setTimeout(() => {
+            element.style.animation = '';
+        }, 300);
+        
+        if (progress < 1) {
+            window.requestAnimationFrame(step);
+        }
+    };
+    window.requestAnimationFrame(step);
+}
+
+// Update progress display
+function updateProgress(totalPaid, monthsCompleted) {
+    const progressPercent = Math.min(Math.round((monthsCompleted / 6) * 100), 100);
+    
+    // Update progress text
+    document.getElementById('progressText').textContent = `${monthsCompleted} of 6 months`;
+    
+    // Animate progress bar
+    setTimeout(() => {
+        document.getElementById('progressFill').style.width = `${progressPercent}%`;
+    }, 300);
+    
+    // Update savings status
+    document.getElementById('savingsStatus').textContent = `Month ${monthsCompleted}/6`;
+    
+    return progressPercent;
+}
+
+// Update payment countdown
+function updatePaymentCountdown(nextPaymentInfo) {
+    const countdownContainer = document.getElementById('paymentCountdown');
+    const countdownDisplay = document.getElementById('countdownDisplay');
+    const penaltyNotice = document.getElementById('penaltyNotice');
+    
+    if (!nextPaymentInfo || !nextPaymentInfo.nextPaymentDate) {
+        countdownContainer.style.display = 'none';
+        return;
+    }
+    
+    countdownContainer.style.display = 'block';
+    
+    // Calculate time until next payment
+    const updateCountdown = () => {
+        const now = new Date();
+        const nextPaymentDate = new Date(nextPaymentInfo.nextPaymentDate);
+        const timeDiff = nextPaymentDate - now;
+        
+        if (timeDiff <= 0) {
+            // Payment is overdue
+            const overdueDays = Math.ceil(Math.abs(timeDiff) / (1000 * 60 * 60 * 24));
+            const overdueMonths = Math.floor(overdueDays / 30);
+            
+            countdownDisplay.innerHTML = `
+                <div class="countdown-unit">
+                    <div class="countdown-value countdown-overdue">${overdueDays}</div>
+                    <div class="countdown-label">Days Overdue</div>
+                </div>
+            `;
+            
+            // Show penalty notice
+            penaltyNotice.style.display = 'block';
+            penaltyNotice.innerHTML = `
+                <i class="fas fa-exclamation-triangle"></i>
+                Payment overdue! Penalty: ₦${nextPaymentInfo.penaltyAmount?.toLocaleString() || '0'}
+                (${overdueMonths > 0 ? `${overdueMonths} month(s) ` : ''}overdue)
+            `;
+            
+            // Update notification banner
+            document.getElementById('nextPaymentNotification').style.display = 'flex';
+            document.getElementById('nextPaymentMessage').innerHTML = `
+                Your payment is <strong>${overdueDays} day(s) overdue</strong>.
+                Total due: <strong>₦${nextPaymentInfo.totalAmount?.toLocaleString() || '0'}</strong>
+                (includes ₦${nextPaymentInfo.penaltyAmount?.toLocaleString() || '0'} penalty)
+            `;
+            
+        } else {
+            // Payment is upcoming
+            const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+            
+            // Determine countdown color
+            const countdownClass = days <= 3 ? 'countdown-warning' : '';
+            
+            countdownDisplay.innerHTML = `
+                <div class="countdown-unit">
+                    <div class="countdown-value ${countdownClass}">${days.toString().padStart(2, '0')}</div>
+                    <div class="countdown-label">Days</div>
+                </div>
+                <div class="countdown-unit">
+                    <div class="countdown-value ${countdownClass}">${hours.toString().padStart(2, '0')}</div>
+                    <div class="countdown-label">Hours</div>
+                </div>
+                <div class="countdown-unit">
+                    <div class="countdown-value ${countdownClass}">${minutes.toString().padStart(2, '0')}</div>
+                    <div class="countdown-label">Minutes</div>
+                </div>
+                <div class="countdown-unit">
+                    <div class="countdown-value ${countdownClass}">${seconds.toString().padStart(2, '0')}</div>
+                    <div class="countdown-label">Seconds</div>
+                </div>
+            `;
+            
+            // Hide penalty notice if not overdue
+            penaltyNotice.style.display = 'none';
+            
+            // Update notification banner
+            if (days <= 3) {
+                document.getElementById('nextPaymentNotification').style.display = 'flex';
+                document.getElementById('nextPaymentMessage').innerHTML = `
+                    Your next payment of <strong>₦${nextPaymentInfo.totalAmount?.toLocaleString() || '0'}</strong>
+                    is due in <strong>${days} day(s)</strong> on
+                    <strong>${nextPaymentDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</strong>
+                `;
+            } else {
+                document.getElementById('nextPaymentNotification').style.display = 'none';
+            }
+        }
+    };
+    
+    // Initial update
+    updateCountdown();
+    
+    // Update every second
+    return setInterval(updateCountdown, 1000);
+}
+
+// Check withdrawal eligibility
+async function checkWithdrawalEligibility() {
+    try {
+        const token = localStorage.getItem('rmn_token');
+        if (!token) return;
+        
+        // Check if user has completed 6 months
+        const response = await fetch('/api/dashboard', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            const monthsCompleted = calculateCompletedMonths(data.totalSaved);
+            
+            // Update withdraw button
+            const withdrawButton = document.getElementById('withdrawButton');
+            if (monthsCompleted >= 6) {
+                withdrawButton.classList.add('active');
+                withdrawButton.innerHTML = '<i class="fas fa-hand-holding-usd"></i> Awaiting Admin';
+                withdrawButton.onclick = function() {
+                    window.location.href = '/withdraw';
+                };
+            } else {
+                withdrawButton.classList.remove('active');
+                withdrawButton.innerHTML = '<i class="fas fa-lock"></i> Complete 6 Months';
+                withdrawButton.onclick = null;
+            }
+        }
+    } catch (error) {
+        console.error('Error checking withdrawal eligibility:', error);
+    }
+}
+
+// Check for pending withdrawals
+async function checkPendingWithdrawals() {
+    try {
+        const token = localStorage.getItem('rmn_token');
+        if (!token) return;
+        
+        const response = await fetch('/api/withdrawals?status=pending', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
+        if (response.ok) {
+            const withdrawals = await response.json();
+            if (withdrawals.length > 0) {
+                // Show withdrawal notification
+                const withdrawal = withdrawals[0];
+                document.getElementById('withdrawalNotification').style.display = 'block';
+                document.getElementById('withdrawalMessage').textContent = 
+                    `Confirm receipt of ₦${withdrawal.amount.toLocaleString()} to reset dashboard`;
+            } else {
+                document.getElementById('withdrawalNotification').style.display = 'none';
+            }
+        }
+    } catch (error) {
+        console.error('Error checking withdrawals:', error);
+    }
+}
+
+// Load dashboard data
+async function loadDashboardData() {
+    try {
+        const token = localStorage.getItem('rmn_token');
+        if (!token) {
+            window.location.href = '/';
+            return;
+        }
+        
+        const response = await fetch('/api/dashboard', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.error || 'Failed to load dashboard data');
+        }
+        
+        // Update UI with data
+        document.getElementById('userName').textContent = data.user.firstName || 'User';
+        
+        // Calculate completed months based on total paid
+        const monthsCompleted = calculateCompletedMonths(data.totalSaved);
+        const progressPercent = updateProgress(data.totalSaved, monthsCompleted);
+        
+        // Update total saved with animation
+        animateValue(document.getElementById('totalSaved'), 0, data.totalSaved, 1000);
+        
+        // Check withdrawal eligibility
+        await checkWithdrawalEligibility();
+        
+        // Update payment countdown
+        if (data.nextPaymentInfo) {
+            // Clear any existing interval
+            if (window.countdownInterval) {
+                clearInterval(window.countdownInterval);
+            }
+            
+            // Start new countdown
+            window.countdownInterval = updatePaymentCountdown(data.nextPaymentInfo);
+        }
+        
+        // Load payment history
+        loadPaymentHistory(data.recentTransactions);
+        
+        // Show notification badge if there are unread notifications
+        if (data.unreadNotifications > 0) {
+            document.getElementById('notificationBadge').style.display = 'block';
+        } else {
+            document.getElementById('notificationBadge').style.display = 'none';
+        }
+        
+        // Update user data in localStorage
+        const userData = JSON.parse(localStorage.getItem('rmn_user') || '{}');
+        userData.firstName = data.user.firstName;
+        userData.lastName = data.user.lastName;
+        userData.email = data.user.email;
+        localStorage.setItem('rmn_user', JSON.stringify(userData));
+        
+        // Check for pending withdrawals
+        await checkPendingWithdrawals();
+        
+    } catch (error) {
+        console.error('Dashboard error:', error);
+        if (error.message === 'Unauthorized') {
+            localStorage.removeItem('rmn_token');
+            localStorage.removeItem('rmn_user');
+            window.location.href = '/';
+        }
+    }
+}
+
+// Load payment history
+function loadPaymentHistory(transactions) {
+    const transactionList = document.getElementById('transactionList');
+    
+    if (!transactions || transactions.length === 0) {
+        transactionList.innerHTML = '<div class="transaction-card"><div class="transaction-details">No transactions yet</div></div>';
+        return;
+    }
+    
+    transactionList.innerHTML = '';
+    
+    transactions.forEach(transaction => {
+        const transactionCard = document.createElement('div');
+        transactionCard.className = 'transaction-card';
+        
+        // Set icon based on type
+        let icon, title;
+        if (transaction.type === 'payment') {
+            icon = 'fa-piggy-bank';
+            title = transaction.penaltyAmount > 0 ? 
+                'Payment (with penalty)' : 'Monthly Payment';
+        } else if (transaction.type === 'withdrawal') {
+            icon = 'fa-hand-holding-usd';
+            title = 'Withdrawal';
+        } else {
+            icon = 'fa-exchange-alt';
+            title = transaction.description || 'Transaction';
+        }
+        
+        // Format date
+        const date = new Date(transaction.date).toLocaleDateString('en-US', { 
+            month: 'short', 
+            day: 'numeric', 
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        
+        // Set status class
+        const statusClass = `status-${transaction.status}`;
+        
+        // Check if it has penalty
+        const penaltyText = transaction.penaltyAmount > 0 ? 
+            `<div style="font-size: 11px; color: var(--error-color); margin-top: 2px;">
+                Penalty: ₦${transaction.penaltyAmount.toLocaleString()}
+            </div>` : '';
+        
+        transactionCard.innerHTML = `
+            <div class="transaction-icon">
+                <i class="fas ${icon}"></i>
+            </div>
+            <div class="transaction-details">
+                <div class="transaction-title">${title}</div>
+                <div class="transaction-date">${date}</div>
+                ${penaltyText}
+            </div>
+            <div class="transaction-amount ${statusClass}">
+                <i class="fas ${transaction.status === 'completed' ? 'fa-check-circle' : 'fa-clock'}"></i>
+                ₦${transaction.amount.toLocaleString()}
+            </div>
+        `;
+        transactionList.appendChild(transactionCard);
+    });
+}
+
+// Check for dashboard reset
+function checkForDashboardReset() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('reset')) {
+        showToast('Dashboard reset! Start your new savings cycle.', 'success');
+        
+        // Remove the parameter from URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+        
+        // Refresh data
+        loadDashboardData();
+    }
+}
+
+// Initialize when page loads
+window.addEventListener('DOMContentLoaded', () => {
+    // Set up theme detection
+    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+    if (prefersDarkScheme.matches) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    }
+    prefersDarkScheme.addEventListener('change', e => {
+        document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+    });
+
+    // Connect to Socket.IO
+    const userData = JSON.parse(localStorage.getItem('rmn_user') || '{}');
+    if (userData.id) {
+        socket.emit('join-user-room', userData.id);
+    }
+
+    // Load dashboard data
+    loadDashboardData();
+    
+    // Check for dashboard reset
+    checkForDashboardReset();
+    
+    // Check for pending withdrawals every 30 seconds
+    setInterval(checkPendingWithdrawals, 30000);
+});
+
+// Clean up interval when page unloads
+window.addEventListener('beforeunload', () => {
+    if (window.countdownInterval) {
+        clearInterval(window.countdownInterval);
+    }
+});
+
+// Add toast message styles to head
+const style = document.createElement('style');
+style.textContent = `
+    .toast-message {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 8px;
+        color: white;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        z-index: 1100;
+        animation: slideInRight 0.3s, fadeOut 0.5s 4.5s forwards;
+        max-width: 350px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    @keyframes slideInRight {
+        from { right: -400px; opacity: 0; }
+        to { right: 20px; opacity: 1; }
+    }
+    
+    @keyframes fadeOut {
+        from { opacity: 1; }
+        to { opacity: 0; }
+    }
+`;
+document.head.appendChild(style);
+</script>
+</body>
+</html>

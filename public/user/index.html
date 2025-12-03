@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rich More Now - Professional Savings Platform</title>
+    <style>
+        :root {
+            --primary-color: #0d60d8;
+            --primary-dark: #0a4eb0;
+            --secondary-color: #f8f9fa;
+            --text-color: #333;
+            --text-light: #666;
+            --background-color: #ffffff;
+            --card-bg: #f8f9fa;
+            --border-color: #e0e0e0;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --nav-width: 280px;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #4a90e2;
+            --primary-dark: #3a7bc8;
+            --secondary-color: #2d2d2d;
+            --text-color: #f0f0f0;
+            --text-light: #aaa;
+            --background-color: #1e1e1e;
+            --card-bg: #2d2d2d;
+            --border-color: #444;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        body.no-scroll {
+            overflow: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--background-color);
+            box-shadow: var(--shadow);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 10px 0;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .logo img {
+            height: 35px;
+            margin-right: 10px;
+        }
+
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 22px;
+            cursor: pointer;
+            z-index: 1001;
+            padding: 5px;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 25px;
+            position: relative;
+        }
+
+        nav ul li a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            padding: 8px 0;
+            position: relative;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            border: 2px solid var(--primary-color);
+        }
+
+        .cta-button:hover {
+            background-color: transparent;
+            color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(13, 96, 216, 0.2);
+        }
+
+        /* Clickable Container Effect */
+        .clickable-container {
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .clickable-container:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 150px 0 80px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(13, 96, 216, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            font-weight: 800;
+            line-height: 1.2;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            color: var(--text-light);
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.3s forwards;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            font-weight: 800;
+            opacity: 0;
+            animation: fadeIn 1s ease 0.3s forwards;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 50px;
+            color: var(--text-light);
+            font-size: 1.1rem;
+            opacity: 0;
+            animation: fadeIn 1s ease 0.6s forwards;
+        }
+
+        /* Instructional Grid */
+        .instruction-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .instruction-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .instruction-image {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+        }
+
+        .instruction-content h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .instruction-content p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .feature-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            padding: 35px 25px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .feature-icon img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .feature-card p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            padding: 80px 0;
+            background-color: var(--secondary-color);
+        }
+
+        .steps {
+            display: flex;
+            flex-direction: column;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .step {
+            display: flex;
+            margin-bottom: 35px;
+            opacity: 0;
+            animation: fadeInRight 1s ease forwards;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            background-color: var(--primary-color);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            margin-right: 20px;
+            flex-shrink: 0;
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-icon {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .step-icon img {
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+            width: 60px;
+            height: 60px;
+        }
+
+        .step-content h3 {
+            margin-bottom: 12px;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .step-content p {
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .step-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        /* Payment Methods */
+        .payment-methods {
+            margin-top: 60px;
+            padding: 30px;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--card-bg) 100%);
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .payment-methods h3 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+        }
+
+        .payment-icons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .payment-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .payment-icon:hover {
+            transform: translateY(-5px);
+        }
+
+        .payment-icon img {
+            padding: 15px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+        }
+
+        .payment-icon span {
+            font-weight: 600;
+            color: var(--text-color);
+            font-size: 0.9rem;
+        }
+
+        /* Vision Section */
+        .vision {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .vision-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .vision-item {
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        .vision-icon {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .vision-icon img {
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+            width: 80px;
+            height: 80px;
+        }
+
+        .vision-item h3 {
+            margin-bottom: 20px;
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .vision-item p {
+            color: var(--text-light);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            text-align: left;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .value-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px 25px 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            text-align: center;
+            position: relative;
+        }
+
+        .value-icon {
+            position: absolute;
+            top: -20px;
+            right: 20px;
+            background: var(--background-color);
+            padding: 10px;
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 2;
+        }
+
+        .value-icon img {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+        }
+
+        .value-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .value-card h4 {
+            font-size: 1.25rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .value-card p {
+            color: var(--text-light);
+        }
+
+        /* Investment Portfolio */
+        .portfolio {
+            padding: 80px 0;
+            background-color: var(--secondary-color);
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .portfolio-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px 25px 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            text-align: center;
+            position: relative;
+        }
+
+        .portfolio-icon {
+            position: absolute;
+            top: -20px;
+            right: 20px;
+            background: var(--background-color);
+            padding: 10px;
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 2;
+        }
+
+        .portfolio-icon img {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+        }
+
+        .portfolio-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .portfolio-card h4 {
+            font-size: 1.25rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .portfolio-card p {
+            color: var(--text-light);
+        }
+
+        /* Program Structure */
+        .program {
+            padding: 80px 0;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, rgba(13, 96, 216, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--secondary-color);
+            padding: 70px 0 25px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 35px;
+            margin-bottom: 50px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.25rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-column ul li a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 14px;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            color: var(--text-light);
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 25px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-light);
+            font-size: 13px;
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--background-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-spinner.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(13, 96, 216, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        /* Mobile Navigation */
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: var(--nav-width);
+            height: 100vh;
+            background-color: var(--background-color);
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: right 0.3s ease;
+            padding: 70px 25px 25px;
+            overflow-y: auto;
+        }
+
+        .mobile-nav.active {
+            right: 0;
+        }
+
+        .mobile-nav ul {
+            list-style: none;
+        }
+
+        .mobile-nav ul li {
+            margin-bottom: 15px;
+        }
+
+        .mobile-nav ul li a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            display: block;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .mobile-nav .cta-button {
+            display: block;
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from { 
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .nav-toggle {
+                display: block;
+            }
+
+            nav.desktop-nav {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .payment-icons {
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 8px 0;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .logo img {
+                height: 30px;
+            }
+
+            .hero {
+                padding: 130px 0 60px;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+                padding: 0 15px;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+                margin-bottom: 30px;
+                padding: 0 15px;
+            }
+
+            .section-subtitle {
+                margin-bottom: 40px;
+                padding: 0 15px;
+                font-size: 1rem;
+            }
+
+            .features, .how-it-works, .vision, .portfolio, .program, .cta-section {
+                padding: 60px 0;
+            }
+
+            .instruction-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .step {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                margin-bottom: 30px;
+            }
+
+            .step-number {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+
+            .step-content {
+                width: 100%;
+            }
+
+            .step-icon img {
+                width: 50px;
+                height: 50px;
+            }
+
+            .step-image {
+                height: 180px;
+            }
+
+            .payment-methods {
+                padding: 20px;
+                margin-top: 40px;
+            }
+
+            .payment-methods h3 {
+                font-size: 1.5rem;
+                margin-bottom: 20px;
+            }
+
+            .payment-icons {
+                gap: 15px;
+            }
+
+            .payment-icon img {
+                width: 60px;
+                height: 60px;
+                padding: 10px;
+            }
+
+            .payment-icon span {
+                font-size: 0.8rem;
+            }
+
+            .vision-item h3 {
+                font-size: 1.4rem;
+                padding: 0 10px;
+            }
+
+            .vision-item p {
+                text-align: center;
+                font-size: 1rem;
+                padding: 0 10px;
+            }
+
+            .values-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .value-card, .portfolio-card {
+                padding: 25px 20px 20px;
+            }
+
+            .value-icon, .portfolio-icon {
+                top: -15px;
+                right: 15px;
+                padding: 8px;
+            }
+
+            .value-icon img, .portfolio-icon img {
+                width: 25px;
+                height: 25px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .mobile-nav {
+                width: 85%;
+                padding: 60px 20px 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 1.8rem;
+                padding: 0 15px;
+            }
+
+            .hero p {
+                font-size: 0.95rem;
+            }
+
+            .feature-card {
+                padding: 25px 20px;
+            }
+
+            .feature-image {
+                height: 180px;
+            }
+
+            .step-image {
+                height: 160px;
+            }
+
+            .payment-icons {
+                justify-content: space-around;
+            }
+
+            .payment-icon {
+                min-width: 100px;
+            }
+
+            .section-title {
+                font-size: 1.6rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .hero h1 {
+                font-size: 1.6rem;
+            }
+
+            .payment-icon img {
+                width: 50px;
+                height: 50px;
+            }
+
+            .payment-icon span {
+                font-size: 0.75rem;
+            }
+
+            .feature-card h3, .value-card h4, .portfolio-card h4 {
+                font-size: 1.1rem;
+            }
+
+            .step-number {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+        /* Enhanced Banner Logo Styles */
+.logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    padding: 5px 0;
+}
+
+.logo:hover {
+    transform: translateY(-2px);
+}
+
+/* Logo container for proper alignment */
+.logo-container {
+    display: flex;
+    align-items: center;
+    height: 45px; /* Fixed height for consistency */
+}
+
+/* Banner logo image - responsive behavior */
+.logo img {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+    max-width: 250px; /* Maximum width for larger screens */
+    min-width: 150px; /* Minimum width for smaller screens */
+}
+
+/* Optional: Add gradient overlay on hover for visual feedback */
+.logo::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to right, transparent, rgba(13, 96, 216, 0.1));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 5px;
+    pointer-events: none;
+}
+
+.logo:hover::after {
+    opacity: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .logo-container {
+        height: 40px;
+    }
+    
+    .logo img {
+        max-width: 220px;
+    }
+}
+
+@media (max-width: 768px) {
+    .logo-container {
+        height: 35px;
+    }
+    
+    .logo img {
+        max-width: 180px;
+        min-width: 120px;
+    }
+}
+
+@media (max-width: 576px) {
+    .logo-container {
+        height: 32px;
+    }
+    
+    .logo img {
+        max-width: 160px;
+        min-width: 100px;
+    }
+}
+
+@media (max-width: 400px) {
+    .logo-container {
+        height: 30px;
+    }
+    
+    .logo img {
+        max-width: 140px;
+        min-width: 90px;
+    }
+}
+
+/* For extremely small screens */
+@media (max-width: 320px) {
+    .logo-container {
+        height: 28px;
+    }
+    
+    .logo img {
+        max-width: 130px;
+        min-width: 80px;
+    }
+}
+    </style>
+</head>
+<body>
+    <!-- Loading Spinner -->
+    <div class="loading-spinner">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <img src="user/logo-horizontal.jpg" alt="Rich More Now Logo">
+            
+            </a>
+            
+            <button class="nav-toggle" id="navToggle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+
+            <nav class="desktop-nav">
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#vision">Our Vision</a></li>
+                    <li><a href="#portfolio">Investments</a></li>
+                    <li><a href="#program">Program</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <a href="/signup" class="cta-button">Sign Up</a>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav" id="mobileNav">
+        <ul>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#vision">Our Vision</a></li>
+            <li><a href="#portfolio">Investments</a></li>
+            <li><a href="#program">Program</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="/signup" class="cta-button">Sign Up</a></li>
+        </ul>
+    </div>
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Professional Savings & Investment Platform</h1>
+            <p>Start with just ₦12,000 monthly and build financial discipline with our secure, automated platform designed to grow your wealth through community-powered investments.</p>
+            <a href="/signup" class="cta-button">Get Started</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title animated-text">Why Choose Rich More Now</h2>
+            <p class="section-subtitle animated-text">We provide the tools and discipline you need to achieve your financial goals</p>
+            
+            <!-- Instructional Images Grid -->
+            <div class="instruction-grid">
+                <div class="instruction-card">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2331/2331943.png" 
+                         alt="POS payment" class="instruction-image">
+                    <div class="instruction-content">
+                        <h3>POS Payments</h3>
+                        <p>Convenient payment options through secure POS terminals</p>
+                    </div>
+                </div>
+                <div class="instruction-card">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2489/2489756.png" 
+                         alt="Mobile transaction" class="instruction-image">
+                    <div class="instruction-content">
+                        <h3>Mobile Banking</h3>
+                        <p>Complete transactions anytime, anywhere with mobile banking</p>
+                    </div>
+                </div>
+                <div class="instruction-card">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135679.png" 
+                         alt="Financial growth chart" class="instruction-image">
+                    <div class="instruction-content">
+                        <h3>Growth Tracking</h3>
+                        <p>Visualize your financial progress with interactive charts</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card clickable-container">
+                    <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                         alt="Bank Security" class="feature-image">
+                    <div class="feature-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3014/3014541.png" alt="Transfer confirmation" width="40">
+                    </div>
+                    <h3>Secure Transfers</h3>
+                    <p>Instant and secure money transfers with real-time confirmation</p>
+                </div>
+                <div class="feature-card clickable-container">
+                    <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                         alt="Flexible Savings" class="feature-image">
+                    <div class="feature-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/482/482541.png" alt="Digital wallet payment" width="40">
+                    </div>
+                    <h3>Digital Wallet</h3>
+                    <p>Manage your funds easily with our secure digital wallet system</p>
+                </div>
+                <div class="feature-card clickable-container">
+                    <img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                         alt="Customer Support" class="feature-image">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                    </div>
+                    <h3>24/7 Support</h3>
+                    <p>Our dedicated team is always available to assist you with any questions or concerns.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <h2 class="section-title animated-text">How It Works</h2>
+            <p class="section-subtitle animated-text">Start your savings journey in just 3 simple steps</p>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <div class="step-icon">
+                            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135679.png" alt="Financial growth" width="60">
+                        </div>
+                        <h3>Create Your Account</h3>
+                        <p>Sign up in minutes with your basic information and verify your identity for security purposes.</p>
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                             alt="Create Account" class="step-image">
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <div class="step-icon">
+                            <img src="https://cdn-icons-png.flaticon.com/512/2489/2489756.png" alt="Mobile transaction" width="60">
+                        </div>
+                        <h3>Set Up Your Plan</h3>
+                        <p>Choose your savings amount (minimum ₦12,000) and frequency (monthly, weekly, etc.).</p>
+                        <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                             alt="Set Up Plan" class="step-image">
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <div class="step-icon">
+                            <img src="https://cdn-icons-png.flaticon.com/512/3014/3014541.png" alt="Transfer confirmation" width="60">
+                        </div>
+                        <h3>Watch Your Money Grow</h3>
+                        <p>Track your savings growth through our dashboard and withdraw when you need it.</p>
+                        <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                             alt="Track Growth" class="step-image">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Payment Methods -->
+            <div class="payment-methods">
+                <h3 class="animated-text">Supported Payment Methods</h3>
+                <div class="payment-icons">
+                    <div class="payment-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/2331/2331943.png" alt="POS payment" width="80">
+                        <span>POS Payments</span>
+                    </div>
+                    <div class="payment-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/2489/2489756.png" alt="Mobile transaction" width="80">
+                        <span>Mobile Banking</span>
+                    </div>
+                    <div class="payment-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/482/482541.png" alt="Digital wallet payment" width="80">
+                        <span>Digital Wallets</span>
+                    </div>
+                    <div class="payment-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135679.png" alt="Financial growth chart" width="80">
+                        <span>Investment Tracking</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vision Section -->
+    <section class="vision" id="vision">
+        <div class="container">
+            <h2 class="section-title animated-text">Our Vision & Values</h2>
+            <div class="vision-content">
+                <div class="vision-item animated-text">
+                    <div class="vision-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135679.png" alt="Financial growth" width="80">
+                    </div>
+                    <h3>Empowering Communities, Building Wealth Together</h3>
+                    <p>Richmore is a community-driven organization that empowers individuals to build wealth and improve their livelihoods through structured savings, investments, and social support. We believe in the power of collective action to create lasting impact.</p>
+                </div>
+            </div>
+            <div class="values-grid">
+                <div class="value-card clickable-container">
+                    <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                         alt="Inclusivity" class="portfolio-image">
+                    <div class="value-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3014/3014541.png" alt="Secure transfer" width="40">
+                    </div>
+                    <h4>Secure Transactions</h4>
+                    <p>All transfers are encrypted and confirmed in real-time for your peace of mind</p>
+                </div>
+                <div class="value-card clickable-container">
+                    <img src="https://images.unsplash.com/photo-1554224154-26032ffc0d07?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                         alt="Integrity" class="portfolio-image">
+                    <div class="value-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/482/482541.png" alt="Digital wallet" width="40">
+                    </div>
+                    <h4>Digital Innovation</h4>
+                    <p>Leading the way in digital financial solutions for modern needs</p>
+                </div>
+                <div class="value-card clickable-container">
+                    <img src="https://images.unsplash.com/photo-1555212697-194d092e3b8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                         alt="Community" class="portfolio-image">
+                    <h4>Community</h4>
+                    <p>We foster a spirit of collaboration and mutual support among our members.</p>
+                </div>
+                <div class="value-card clickable-container">
+                    <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                         alt="Empowerment" class="portfolio-image">
+                    <h4>Empowerment</h4>
+                    <p>We equip members with the tools and knowledge to achieve financial independence.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Investment Portfolio -->
+    <section class="portfolio" id="portfolio">
+        <div class="container">
+            <h2 class="section-title animated-text">Our Investment Portfolio</h2>
+            <p class="section-subtitle animated-text">We invest in diverse sectors to create sustainable impact and generate returns</p>
+            <div class="portfolio-grid">
+                <div class="portfolio-card clickable-container">
+                    <img src="https://images.unsplash.com/photo-1417733403748-83bbc7c05140?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                         alt="Agriculture" class="portfolio-image">
+                    <div class="portfolio-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/2331/2331943.png" alt="POS payment" width="40">
+                    </div>
+                    <h4>Agricultural Financing</h4>
+                    <p>POS payment solutions for agricultural markets and value chains</p>
+                </div>
+                <div class="portfolio-card clickable-container">
+                    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                         alt="Hotels" class="portfolio-image">
+                    <div class="portfolio-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/2489/2489756.png" alt="Mobile transaction" width="40">
+                    </div>
+                    <h4>Hospitality Tech</h4>
+                    <p>Mobile payment solutions for hotels and tourism services</p>
+                </div>
+                <div class="portfolio-card clickable-container">
+                    <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                         alt="Education" class="portfolio-image">
+                    <div class="portfolio-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135679.png" alt="Financial growth" width="40">
+                    </div>
+                    <h4>Education Investment</h4>
+                    <p>Financial growth tracking for educational institutions</p>
+                </div>
+                <div class="portfolio-card clickable-container">
+                    <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                         alt="Transportation" class="portfolio-image">
+                    <div class="portfolio-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3014/3014541.png" alt="Transfer confirmation" width="40">
+                    </div>
+                    <h4>Transportation Finance</h4>
+                    <p>Instant transfer solutions for transportation networks</p>
+                </div>
+                <div class="portfolio-card clickable-container">
+                    <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                         alt="Marketing" class="portfolio-image">
+                    <div class="portfolio-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/482/482541.png" alt="Digital wallet" width="40">
+                    </div>
+                    <h4>Digital Product Sales</h4>
+                    <p>Digital wallet payments for product marketing and sales</p>
+                </div>
+                <div class="portfolio-card clickable-container">
+                    <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                         alt="Proficiency" class="portfolio-image">
+                    <h4>Proficiency</h4>
+                    <p>Developing skills and expertise through training initiatives</p>
+                </div>
+                <div class="portfolio-card clickable-container">
+                    <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                         alt="Real Estate" class="portfolio-image">
+                    <h4>Real Estate</h4>
+                    <p>Investing in property development and management</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Program Structure -->
+    <section class="program" id="program">
+        <div class="container">
+            <h2 class="section-title">Our Program Structure</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Registration</h3>
+                        <p>Members join with a modest fee (₦3,000) to cover administrative costs</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Savings Plan</h3>
+                        <p>Members invest ₦12,000 monthly for six months (₦72,000 total)</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Returns</h3>
+                        <p>Members receive ₦100,000 plus food items or financial literacy resources</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Community Building</h3>
+                        <p>Referral system encourages network growth. Non-referring members receive their ₦72,000 back plus food items</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="signup">
+        <div class="container">
+            <h2 class="section-title">Ready to Transform Your Finances?</h2>
+            <p class="section-subtitle">Join our community of disciplined savers and investors today</p>
+            <a href="/signup" class="cta-button">Sign Up Now</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Rich More Now</h3>
+                    <p>Empowering Communities, Building Wealth Together</p>
+                  
+                </div>
+
+            <div class="copyright">
+                <p>&copy; 2025/2026 Rich More Now. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Loading Spinner
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.querySelector('.loading-spinner').classList.add('hidden');
+            }, 1000);
+        });
+
+        // Automatic Theme Detection
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+
+        // Set theme based on system preference
+        if (prefersDarkScheme.matches) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+
+        // Listen for system theme changes
+        prefersDarkScheme.addEventListener('change', e => {
+            if (e.matches) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+            }
+        });
+
+        // Mobile Navigation Toggle
+        const navToggle = document.getElementById('navToggle');
+        const mobileNav = document.getElementById('mobileNav');
+        const overlay = document.getElementById('overlay');
+
+        navToggle.addEventListener('click', function() {
+            mobileNav.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.classList.toggle('no-scroll');
+        });
+
+        overlay.addEventListener('click', function() {
+            mobileNav.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.classList.remove('no-scroll');
+        });
+
+        // Close mobile nav when clicking a link
+        document.querySelectorAll('.mobile-nav a').forEach(link => {
+            link.addEventListener('click', function() {
+                mobileNav.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.classList.remove('no-scroll');
+            });
+        });
+
+        // Clickable container effect
+        document.querySelectorAll('.clickable-container').forEach(container => {
+            container.addEventListener('click', function() {
+                this.style.transform = 'scale(0.98)';
+                this.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                    this.style.boxShadow = '';
+                }, 200);
+            });
+        });
+
+        // Animation on scroll
+        const animateOnScroll = function() {
+            const elements = document.querySelectorAll('.feature-card, .step, .section-title, .section-subtitle, .vision-item, .value-card, .portfolio-card, .instruction-card');
+            
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.3;
+                
+                if (elementPosition < screenPosition) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translate(0)';
+                }
+            });
+        };
+
+        window.addEventListener('scroll', animateOnScroll);
+        animateOnScroll(); // Initialize check on load
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

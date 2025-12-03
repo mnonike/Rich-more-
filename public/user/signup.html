@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rich More Now - Sign Up</title>
+    <style>
+
+        :root {
+            --primary-color: #0d60d8;
+            --primary-dark: #0a4eb0;
+            --secondary-color: #f8f9fa;
+            --text-color: #333;
+            --text-light: #666;
+            --background-color: #ffffff;
+            --card-bg: #f8f9fa;
+            --border-color: #e0e0e0;
+            --error-color: #e74c3c;
+            --success-color: #2ecc71;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #4a90e2;
+            --primary-dark: #3a7bc8;
+            --secondary-color: #2d2d2d;
+            --text-color: #f0f0f0;
+            --text-light: #aaa;
+            --background-color: #1e1e1e;
+            --card-bg: #2d2d2d;
+            --border-color: #444;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--background-color);
+            box-shadow: var(--shadow);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 15px 0;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .logo img {
+            height: 35px;
+            margin-right: 10px;
+        }
+
+        /* Sign Up Section */
+        .signup-section {
+            padding: 150px 0 80px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .signup-container {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 600px;
+            border: 1px solid var(--border-color);
+        }
+
+        .signup-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--primary-color);
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .referral-banner {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .referral-banner h3 {
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .referral-banner p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:disabled {
+            background-color: var(--secondary-color);
+            color: var(--text-light);
+            cursor: not-allowed;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .referrer-info {
+            background-color: var(--secondary-color);
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 5px;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--text-light);
+        }
+
+        .login-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Success Message */
+        .success-message {
+            text-align: center;
+            color: var(--success-color);
+            margin-top: 20px;
+            font-weight: 600;
+            display: none;
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: none;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .spinner {
+            width: 30px;
+            height: 30px;
+            border: 4px solid rgba(13, 96, 216, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .signup-section {
+                padding: 130px 0 60px;
+            }
+
+            .signup-container {
+                padding: 30px;
+            }
+
+            .signup-title {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .signup-container {
+                padding: 25px 20px;
+            }
+
+            .signup-title {
+                font-size: 1.6rem;
+            }
+        }
+    
+
+        /* Referral Code Field */
+        .referral-field {
+            position: relative;
+        }
+
+        .referral-field .form-control:disabled {
+            background-color: var(--secondary-color);
+            color: var(--text-light);
+            border-color: var(--border-color);
+            cursor: not-allowed;
+        }
+
+        .referral-note {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .referral-note i {
+            color: var(--primary-color);
+        }
+        /* Top Logo Banner for Signup */
+.top-logo-banner {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    padding: 12px 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1100;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-100%); }
+    to { transform: translateY(0); }
+}
+
+.top-logo-banner .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+}
+
+.top-logo-banner img {
+    height: 35px;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+}
+
+/* Adjust signup section padding for banner */
+.signup-section {
+    padding-top: 180px; /* Increased to accommodate both banners */
+}
+    </style>
+</head>
+<body>
+  <!-- Top Logo Banner -->
+<div class="top-logo-banner">
+    <div class="container">
+        <img src="logo-horizontal.jpg" alt="Rich More Now Logo">
+    </div>
+</div>
+
+
+    <!-- Sign Up Section -->
+    <section class="signup-section">
+        <div class="container">
+            <div class="signup-container">
+                <h2 class="signup-title">Create Your Account</h2>
+                <form id="signupForm">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" class="form-control" required>
+                        <div class="error-message" id="firstNameError">Please enter your first name</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" class="form-control" required>
+                        <div class="error-message" id="lastNameError">Please enter your last name</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" class="form-control" required>
+                        <div class="error-message" id="emailError">Please enter a valid email address</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" class="form-control" required>
+                        <div class="error-message" id="phoneError">Please enter a valid phone number</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="accountNumber">Account Number</label>
+                        <input type="text" id="accountNumber" class="form-control" required>
+                        <div class="error-message" id="accountNumberError">Please enter a valid account number</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="accountName">Account Name</label>
+                        <input type="text" id="accountName" class="form-control" required>
+                        <div class="error-message" id="accountNameError">Please enter your account name</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="bankName">Bank Name</label>
+                        <input type="text" id="bankName" class="form-control" required>
+                        <div class="error-message" id="bankNameError">Please enter your bank name</div>
+                    </div>
+                    <div class="form-group referral-field">
+                        <label for="referralCode">Referral Code</label>
+                        <input type="text" id="referralCode" class="form-control" disabled>
+                        <div class="referral-note">
+                            <i class="fas fa-info-circle"></i>
+                            <span id="referralNote">Referral code will be auto-filled if provided in URL</span>
+                        </div>
+                        <div class="error-message" id="referralCodeError">Please enter a valid referral code</div>
+                    </div>
+                    <button type="submit" class="cta-button">Register Now</button>
+                    <div class="loading-spinner" id="loadingSpinner">
+                        <div class="spinner"></div>
+                    </div>
+                    <div class="success-message" id="successMessage">
+                        Registration successful! Redirecting to dashboard...
+                    </div>
+                </form>
+                <div class="login-link">
+                    <a href="index.html"></a>
+                </div>
+            </div>
+        </div>
+    </section>
+<script src="/socket.io/socket.io.js"></script>
+    <script>
+        // Check for referral code in URL
+        function getReferralFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('ref');
+        }
+
+        // Validate referral code
+        async function validateReferralCode(code) {
+            try {
+                const response = await fetch(`/api/validate-referral?code=${encodeURIComponent(code)}`);
+                const data = await response.json();
+                return data.valid;
+            } catch (error) {
+                console.error('Referral validation error:', error);
+                return false;
+            }
+        }
+
+        document.getElementById('signupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const accountNumber = document.getElementById('accountNumber').value.trim();
+            const accountName = document.getElementById('accountName').value.trim();
+            const bankName = document.getElementById('bankName').value.trim();
+            const referralCode = document.getElementById('referralCode').value.trim();
+            
+            // Validate form
+            let isValid = true;
+            
+            // First Name validation
+            if (firstName === '') {
+                document.getElementById('firstNameError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('firstNameError').style.display = 'none';
+            }
+            
+            // Last Name validation
+            if (lastName === '') {
+                document.getElementById('lastNameError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('lastNameError').style.display = 'none';
+            }
+            
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                document.getElementById('emailError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('emailError').style.display = 'none';
+            }
+            
+            // Phone validation
+            const phoneRegex = /^[0-9]{11}$/;
+            if (!phoneRegex.test(phone)) {
+                document.getElementById('phoneError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('phoneError').style.display = 'none';
+            }
+            
+            // Account Number validation
+            if (accountNumber === '') {
+                document.getElementById('accountNumberError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('accountNumberError').style.display = 'none';
+            }
+            
+            // Account Name validation
+            if (accountName === '') {
+                document.getElementById('accountNameError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('accountNameError').style.display = 'none';
+            }
+            
+            // Bank Name validation
+            if (bankName === '') {
+                document.getElementById('bankNameError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('bankNameError').style.display = 'none';
+            }
+            
+            if (!isValid) return;
+            
+            // Show loading spinner
+            document.getElementById('loadingSpinner').style.display = 'flex';
+            
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        firstName,
+                        lastName,
+                        email,
+                        phone,
+                        accountNumber,
+                        accountName,
+                        bankName,
+                        referralCode: referralCode || null
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Registration failed');
+                }
+                
+                // Store token and redirect
+                localStorage.setItem('rmn_token', data.token);
+                localStorage.setItem('rmn_user', JSON.stringify(data.user));
+                
+                // Show success message
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('successMessage').style.display = 'block';
+                
+                // Redirect to dashboard after 2 seconds
+                setTimeout(() => {
+                    window.location.href = '/dashboard';
+                }, 2000);
+                
+            } catch (error) {
+                document.getElementById('loadingSpinner').style.display = 'none';
+                alert(error.message || 'Registration failed. Please try again.');
+            }
+        });
+
+        // Initialize referral code from URL
+        function initReferralCode() {
+            const referralCode = getReferralFromURL();
+            const referralField = document.getElementById('referralCode');
+            const referralNote = document.getElementById('referralNote');
+            
+            if (referralCode) {
+                referralField.value = referralCode;
+                referralField.disabled = true;
+                referralNote.textContent = `Using referral code: ${referralCode}`;
+                referralNote.style.color = 'var(--success-color)';
+                
+                // Validate the referral code
+                validateReferralCode(referralCode).then(isValid => {
+                    if (!isValid) {
+                        referralNote.textContent = `Invalid referral code: ${referralCode}`;
+                        referralNote.style.color = 'var(--error-color)';
+                        referralField.value = '';
+                    }
+                });
+            } else {
+                referralField.disabled = false;
+                referralField.placeholder = 'Optional';
+                referralNote.textContent = 'Enter referral code if you have one';
+            }
+        }
+
+        // Check if user is already logged in
+        window.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('rmn_token');
+            if (token) {
+                window.location.href = '/dashboard';
+            }
+            
+            // Initialize referral code
+            initReferralCode();
+        });
+        // Check for referral code in URL
+function getReferralFromURL() {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get('ref');
+}
+
+// Auto-fill referral field on page load
+window.addEventListener('DOMContentLoaded', () => {
+  const referralCode = getReferralFromURL();
+  if (referralCode) {
+    const referralField = document.getElementById('referralCode');
+    if (referralField) {
+      referralField.value = referralCode;
+      referralField.disabled = true;
+      referralField.style.backgroundColor = '#f0f0f0';
+      referralField.style.color = '#666';
+      referralField.style.cursor = 'not-allowed';
+      
+      // Show a message
+      const message = document.createElement('div');
+      message.style.marginTop = '5px';
+      message.style.fontSize = '12px';
+      message.style.color = 'green';
+      message.style.fontWeight = '500';
+      message.innerHTML = `<i class="fas fa-check-circle"></i> Referral code applied!`;
+      referralField.parentNode.appendChild(message);
+      
+      // Also show referral bonus information
+      const bonusInfo = document.createElement('div');
+      bonusInfo.style.marginTop = '10px';
+      bonusInfo.style.padding = '10px';
+      bonusInfo.style.backgroundColor = '#e6f0fd';
+      bonusInfo.style.borderRadius = '5px';
+      bonusInfo.style.fontSize = '13px';
+      bonusInfo.innerHTML = `
+        <strong><i class="fas fa-gift"></i> Referral Bonus Activated!</strong><br>
+        You'll receive special benefits when you complete your first payment.
+      `;
+      referralField.parentNode.parentNode.insertBefore(bonusInfo, referralField.parentNode.nextSibling);
+    }
+  }
+});
+    </script>
+<script>
+    // Check for referral code in URL
+    function getReferralFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('ref');
+    }
+
+    // Validate referral code format
+    function isValidReferralCode(code) {
+        return /^[A-Z]{4}-[A-Z2-9]{6}$/.test(code);
+    }
+
+    // Auto-fill referral field on page load
+    window.addEventListener('DOMContentLoaded', () => {
+        const referralCode = getReferralFromURL();
+        if (referralCode && isValidReferralCode(referralCode)) {
+            const referralField = document.getElementById('referralCode');
+            if (referralField) {
+                referralField.value = referralCode;
+                referralField.disabled = true;
+                referralField.style.backgroundColor = '#e6f0fd';
+                referralField.style.color = '#0a4eb0';
+                referralField.style.cursor = 'not-allowed';
+                referralField.style.borderColor = '#0d60d8';
+                
+                // Show a success message
+                const message = document.createElement('div');
+                message.style.marginTop = '5px';
+                message.style.fontSize = '12px';
+                message.style.color = '#27ae60';
+                message.style.fontWeight = '500';
+                message.style.display = 'flex';
+                message.style.alignItems = 'center';
+                message.style.gap = '5px';
+                message.innerHTML = `
+                    <i class="fas fa-check-circle"></i>
+                    <span>Referral code applied! You'll receive special benefits.</span>
+                `;
+                referralField.parentNode.appendChild(message);
+                
+                // Show referral benefits
+                const benefits = document.createElement('div');
+                benefits.style.marginTop = '10px';
+                benefits.style.padding = '12px';
+                benefits.style.backgroundColor = '#e6f0fd';
+                benefits.style.borderRadius = '8px';
+                benefits.style.fontSize = '13px';
+                benefits.style.border = '1px solid #0d60d8';
+                benefits.innerHTML = `
+                    <div style="font-weight: 600; color: #0a4eb0; margin-bottom: 5px;">
+                        <i class="fas fa-gift"></i> Referral Benefits Activated!
+                    </div>
+                    <ul style="margin: 0; padding-left: 20px; color: #333;">
+                        <li>Priority support</li>
+                        <li>Special welcome bonus</li>
+                        <li>Faster verification process</li>
+                    </ul>
+                `;
+                referralField.parentNode.parentNode.insertBefore(benefits, referralField.parentNode.nextSibling);
+                
+                // Store referral in localStorage for later use
+                localStorage.setItem('pending_referral', referralCode);
+                
+                // Track referral in analytics (if you have any)
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'referral_applied', {
+                        'referral_code': referralCode
+                    });
+                }
+            }
+        }
+        
+        // Clear referral from URL to prevent re-application on refresh
+        if (window.history.replaceState && referralCode) {
+            const newUrl = window.location.origin + window.location.pathname;
+            window.history.replaceState({}, document.title, newUrl);
+        }
+    });
+
+    // Handle form submission with referral
+    document.getElementById('registrationForm')?.addEventListener('submit', function(e) {
+        const referralCode = document.getElementById('referralCode')?.value;
+        const pendingReferral = localStorage.getItem('pending_referral');
+        
+        // Use pending referral if field is empty
+        if (!referralCode && pendingReferral) {
+            const hiddenField = document.createElement('input');
+            hiddenField.type = 'hidden';
+            hiddenField.name = 'referralCode';
+            hiddenField.value = pendingReferral;
+            this.appendChild(hiddenField);
+        }
+        
+        // Clear pending referral
+        localStorage.removeItem('pending_referral');
+    });
+</script>
+</body>
+</html>

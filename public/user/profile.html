@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rich More Now - Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #0d60d8;
+            --primary-light: #e6f0fd;
+            --primary-dark: #0a4eb0;
+            --secondary-color: #f8f9fa;
+            --text-color: #333;
+            --text-light: #666;
+            --background-color: #ffffff;
+            --card-bg: #ffffff;
+            --border-color: #e0e0e0;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            --nav-height: 70px;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --error-color: #e74c3c;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #4a90e2;
+            --primary-light: #1a2d4a;
+            --primary-dark: #3a7bc8;
+            --secondary-color: #2d2d2d;
+            --text-color: #f0f0f0;
+            --text-light: #aaa;
+            --background-color: #1e1e1e;
+            --card-bg: #2d2d2d;
+            --border-color: #444;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            --success-color: #2ecc71;
+            --warning-color: #f1c40f;
+            --error-color: #e74c3c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding-bottom: var(--nav-height);
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        .header {
+            padding: 25px 0 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        /* Profile Card */
+        .profile-card {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            color: var(--primary-color);
+            font-size: 32px;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-name {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .profile-email {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-light);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-size: 16px;
+        }
+
+        .form-input:disabled {
+            background-color: var(--secondary-color);
+            opacity: 0.7;
+        }
+
+        /* Enhanced Referral Section */
+        .referral-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .referral-link-box {
+            display: flex;
+            align-items: center;
+            background-color: var(--primary-light);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            gap: 10px;
+        }
+
+        .referral-link {
+            flex: 1;
+            font-family: monospace;
+            font-size: 14px;
+            color: var(--primary-color);
+            word-break: break-all;
+            padding: 5px;
+            background-color: var(--background-color);
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+        }
+
+        .copy-button {
+            background: var(--primary-color);
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 8px 15px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+        }
+
+        .copy-button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Share Buttons */
+        .share-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .share-btn {
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .share-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Referral Stats */
+        .referral-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .referral-stat {
+            text-align: center;
+            padding: 15px;
+            background-color: var(--secondary-color);
+            border-radius: 10px;
+        }
+
+        .referral-stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: block;
+        }
+
+        .referral-stat-label {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 5px;
+        }
+
+        /* Referred By */
+        .referred-by {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: var(--secondary-color);
+            border-radius: 10px;
+        }
+
+        .referred-by-label {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 5px;
+        }
+
+        .referred-by-value {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        /* Save Button */
+        .save-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .save-button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Edit Button */
+        .edit-button {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: var(--primary-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 5px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toast-success {
+            background-color: var(--success-color);
+        }
+
+        .toast-error {
+            background-color: var(--error-color);
+        }
+
+        .toast-info {
+            background-color: var(--primary-color);
+        }
+
+        /* Live Update Badge */
+        .live-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            background-color: var(--success-color);
+            color: white;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-left: 5px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: var(--nav-height);
+            background-color: var(--background-color);
+            box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.08);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-light);
+            font-size: 11px;
+            font-weight: 500;
+            flex: 1;
+            padding: 8px 0;
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .nav-icon {
+            font-size: 22px;
+            margin-bottom: 3px;
+        }
+
+        .nav-plus {
+            background-color: var(--primary-color);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-top: -25px;
+            box-shadow: 0 4px 15px rgba(13, 96, 216, 0.3);
+            border: 3px solid var(--background-color);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 400px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .profile-card {
+                padding: 20px;
+            }
+
+            .profile-avatar {
+                width: 70px;
+                height: 70px;
+                font-size: 28px;
+            }
+
+            .share-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .referral-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="container">
+        <div class="header">
+            <button class="back-button" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <div class="page-title">My Profile <span class="live-badge" id="liveBadge">LIVE</span></div>
+            <div style="width: 40px;"></div> <!-- Spacer for alignment -->
+        </div>
+
+        <!-- Profile Card -->
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="profile-avatar" id="profileAvatar">
+                    <span id="avatarInitials">JD</span>
+                    <button class="edit-button" onclick="document.getElementById('avatarUpload').click()">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                    <input type="file" id="avatarUpload" accept="image/*" style="display: none;" onchange="handleAvatarUpload(this)">
+                </div>
+                <div>
+                    <div class="profile-name" id="profileName">John Doe</div>
+                    <div class="profile-email" id="profileEmail">john.doe@example.com</div>
+                </div>
+            </div>
+
+            <form id="profileForm">
+                <div class="form-group">
+                    <label class="form-label">First Name</label>
+                    <input type="text" class="form-input" id="firstName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Last Name</label>
+                    <input type="text" class="form-input" id="lastName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" class="form-input" id="phone" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Bank Name</label>
+                    <input type="text" class="form-input" id="bankName">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Account Number</label>
+                    <input type="text" class="form-input" id="accountNumber">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Account Name</label>
+                    <input type="text" class="form-input" id="accountName">
+                </div>
+
+                <!-- Enhanced Referral Section -->
+                <div class="referral-section">
+                    <label class="form-label">Your Referral Link</label>
+                    <div class="referral-link-box">
+                        <div class="referral-link" id="referralLink">
+                            <!-- Link will be generated dynamically -->
+                        </div>
+                        <button type="button" class="copy-button" onclick="copyReferralLink()">
+                            <i class="far fa-copy"></i> Copy
+                        </button>
+                    </div>
+                    
+                    <div class="share-buttons">
+                        <button class="share-btn" onclick="shareOnWhatsApp()">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </button>
+                        <button class="share-btn" onclick="shareOnTelegram()">
+                            <i class="fab fa-telegram"></i> Telegram
+                        </button>
+                        <button class="share-btn" onclick="shareViaSMS()">
+                            <i class="fas fa-sms"></i> SMS
+                        </button>
+                    </div>
+                    
+                    <div class="referral-stats">
+                        <div class="referral-stat">
+                            <span class="referral-stat-value" id="referralCount">0</span>
+                            <span class="referral-stat-label">Total Referrals</span>
+                        </div>
+                        <div class="referral-stat">
+                            <span class="referral-stat-value" id="activeReferrals">0</span>
+                            <span class="referral-stat-label">Active</span>
+                        </div>
+                        <div class="referral-stat">
+                            <span class="referral-stat-value" id="referralBonus">₦0</span>
+                            <span class="referral-stat-label">Bonus Earned</span>
+                        </div>
+                    </div>
+                    
+                    <div class="referred-by">
+                        <div class="referred-by-label">Referred By</div>
+                        <div class="referred-by-value" id="referredByInfo">None</div>
+                    </div>
+                </div>
+
+                <button type="submit" class="save-button">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="/dashboard" class="nav-item">
+            <i class="fas fa-home nav-icon"></i>
+            <span>Home</span>
+        </a>
+        <a href="/transactions" class="nav-item">
+            <i class="fas fa-exchange-alt nav-icon"></i>
+            <span>Transactions</span>
+        </a>
+        <a href="/save" class="nav-item">
+            <div class="nav-plus">
+                <i class="fas fa-plus"></i>
+            </div>
+            <span>Save</span>
+        </a>
+        <a href="/withdraw" class="nav-item">
+            <i class="fas fa-receipt nav-icon"></i>
+            <span>Withdrawal</span>
+        </a>
+        <a href="/profile" class="nav-item active">
+            <i class="fas fa-user nav-icon"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        // Socket.IO connection
+        const socket = io();
+        
+        // Connect to user room
+        socket.on('connect', () => {
+            const userData = localStorage.getItem('rmn_user');
+            if (userData) {
+                const user = JSON.parse(userData);
+                socket.emit('join-user-room', user.id);
+                console.log('Connected to real-time server for user:', user.id);
+            }
+        });
+
+        // Handle real-time profile updates
+        socket.on('profileUpdated', (data) => {
+            console.log('Profile updated in real-time:', data);
+            showToast('Profile updated!', 'success');
+            
+            // Update display name if changed
+            if (data.firstName || data.lastName) {
+                const profileName = document.getElementById('profileName');
+                profileName.textContent = `${data.firstName || ''} ${data.lastName || ''}`.trim();
+            }
+            
+            // Update avatar if changed
+            if (data.avatar) {
+                updateAvatarDisplay(data.avatar);
+            }
+        });
+
+        socket.on('notification', (notification) => {
+            console.log('New notification:', notification);
+            showToast(notification.message, notification.type === 'error' ? 'error' : 'info');
+        });
+
+        // Automatic Theme Detection
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+
+        // Set theme based on system preference
+        if (prefersDarkScheme.matches) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+
+        // Listen for system theme changes
+        prefersDarkScheme.addEventListener('change', e => {
+            if (e.matches) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+            }
+        });
+
+        // Generate and display referral link
+        function generateReferralLink(code) {
+            const baseUrl = window.location.origin;
+            return `${baseUrl}/signup?ref=${code}`;
+        }
+
+        // Copy referral link to clipboard
+        async function copyReferralLink() {
+            const link = document.getElementById('referralLink').textContent;
+            try {
+                await navigator.clipboard.writeText(link);
+                showToast('Referral link copied to clipboard!', 'success');
+            } catch (err) {
+                console.error('Failed to copy: ', err);
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = link;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast('Link copied to clipboard!', 'info');
+            }
+        }
+
+        // Share on WhatsApp
+        function shareOnWhatsApp() {
+            const link = document.getElementById('referralLink').textContent;
+            const text = `Join RichMore Now and start saving! Use my referral link to earn bonuses: ${link}`;
+            const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+        }
+
+        // Share on Telegram
+        function shareOnTelegram() {
+            const link = document.getElementById('referralLink').textContent;
+            const text = `Join RichMore Now and start saving! Use my referral link: ${link}`;
+            const url = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+        }
+
+        // Share via SMS
+        function shareViaSMS() {
+            const link = document.getElementById('referralLink').textContent;
+            const text = `Join RichMore Now: ${link}`;
+            const url = `sms:?body=${encodeURIComponent(text)}`;
+            window.open(url);
+        }
+
+        // Update avatar display
+        function updateAvatarDisplay(avatarData) {
+            const avatar = document.getElementById('profileAvatar');
+            avatar.innerHTML = '';
+            
+            if (avatarData) {
+                const img = document.createElement('img');
+                img.src = avatarData;
+                img.alt = 'Profile Avatar';
+                avatar.appendChild(img);
+            } else {
+                const userData = JSON.parse(localStorage.getItem('rmn_user') || '{}');
+                const initials = (userData.firstName?.charAt(0) || '') + (userData.lastName?.charAt(0) || '') || 'U';
+                const initialsSpan = document.createElement('span');
+                initialsSpan.id = 'avatarInitials';
+                initialsSpan.textContent = initials;
+                avatar.appendChild(initialsSpan);
+            }
+            
+            // Add edit button
+            const editBtn = document.createElement('button');
+            editBtn.className = 'edit-button';
+            editBtn.innerHTML = '<i class="fas fa-camera"></i>';
+            editBtn.onclick = function() { document.getElementById('avatarUpload').click(); };
+            avatar.appendChild(editBtn);
+        }
+
+        // Handle avatar upload
+        function handleAvatarUpload(input) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            if (!file.type.startsWith('image/')) {
+                showToast('Please select an image file', 'error');
+                return;
+            }
+            
+            if (file.size > 5 * 1024 * 1024) { // 5MB limit
+                showToast('Image size should be less than 5MB', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Update display immediately
+                updateAvatarDisplay(e.target.result);
+                
+                // Save to server
+                updateAvatar(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Update avatar on server
+        async function updateAvatar(avatarData) {
+            try {
+                const token = localStorage.getItem('rmn_token');
+                if (!token) {
+                    window.location.href = '/';
+                    return;
+                }
+                
+                const response = await fetch('/api/profile/avatar', {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        avatar: avatarData
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to update avatar');
+                }
+                
+                // Update local storage
+                const userData = JSON.parse(localStorage.getItem('rmn_user'));
+                userData.avatar = avatarData;
+                localStorage.setItem('rmn_user', JSON.stringify(userData));
+                
+                showToast('Avatar updated successfully!', 'success');
+                
+            } catch (error) {
+                console.error('Avatar update error:', error);
+                showToast('Failed to update avatar: ' + error.message, 'error');
+            }
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'info') {
+            // Remove existing toasts
+            const existingToasts = document.querySelectorAll('.toast');
+            existingToasts.forEach(toast => toast.remove());
+            
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 
+                              type === 'error' ? 'fa-exclamation-circle' : 
+                              'fa-info-circle'}"></i>
+                ${message}
+            `;
+            document.body.appendChild(toast);
+            
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Load profile data
+        async function loadProfileData() {
+            try {
+                const token = localStorage.getItem('rmn_token');
+                if (!token) {
+                    window.location.href = '/';
+                    return;
+                }
+                
+                const response = await fetch('/api/profile', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        localStorage.removeItem('rmn_token');
+                        localStorage.removeItem('rmn_user');
+                        window.location.href = '/';
+                        return;
+                    }
+                    throw new Error(`HTTP ${response.status}: Failed to load profile`);
+                }
+                
+                const data = await response.json();
+                
+                // Populate form fields
+                document.getElementById('firstName').value = data.firstName || '';
+                document.getElementById('lastName').value = data.lastName || '';
+                document.getElementById('email').value = data.email || '';
+                document.getElementById('phone').value = data.phone || '';
+                document.getElementById('bankName').value = data.bankName || '';
+                document.getElementById('accountNumber').value = data.accountNumber || '';
+                document.getElementById('accountName').value = data.accountName || '';
+                
+                // Set referral link
+                const referralLink = data.referralLink || generateReferralLink(data.referralCode);
+                document.getElementById('referralLink').textContent = referralLink;
+                
+                // Set referral stats
+                document.getElementById('referralCount').textContent = 
+                    data.referralStats?.totalReferrals || '0';
+                document.getElementById('activeReferrals').textContent = 
+                    data.referralStats?.activeReferrals || '0';
+                document.getElementById('referralBonus').textContent = 
+                    `₦${(data.referralStats?.totalBonus || 0).toLocaleString()}`;
+                
+                // Set referred by info
+                document.getElementById('referredByInfo').textContent = 
+                    data.referredBy || 'None';
+
+                // Set profile name and email
+                document.getElementById('profileName').textContent = 
+                    `${data.firstName || ''} ${data.lastName || ''}`.trim() || 'User';
+                document.getElementById('profileEmail').textContent = data.email || '';
+
+                // Set avatar
+                updateAvatarDisplay(data.avatar);
+                
+                // Update user data in localStorage
+                const userData = JSON.parse(localStorage.getItem('rmn_user') || '{}');
+                userData.firstName = data.firstName;
+                userData.lastName = data.lastName;
+                userData.email = data.email;
+                userData.phone = data.phone;
+                localStorage.setItem('rmn_user', JSON.stringify(userData));
+                
+            } catch (error) {
+                console.error('Profile error:', error);
+                showToast('Failed to load profile: ' + error.message, 'error');
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('profileForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const saveButton = document.querySelector('.save-button');
+            const originalText = saveButton.innerHTML;
+            saveButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            saveButton.disabled = true;
+            
+            try {
+                const token = localStorage.getItem('rmn_token');
+                if (!token) {
+                    window.location.href = '/';
+                    return;
+                }
+                
+                const response = await fetch('/api/profile', {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        firstName: document.getElementById('firstName').value.trim(),
+                        lastName: document.getElementById('lastName').value.trim(),
+                        email: document.getElementById('email').value.trim(),
+                        phone: document.getElementById('phone').value.trim(),
+                        bankName: document.getElementById('bankName').value.trim(),
+                        accountNumber: document.getElementById('accountNumber').value.trim(),
+                        accountName: document.getElementById('accountName').value.trim()
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to update profile');
+                }
+                
+                // Update local storage
+                const userData = JSON.parse(localStorage.getItem('rmn_user') || '{}');
+                userData.firstName = data.user.firstName;
+                userData.lastName = data.user.lastName;
+                userData.email = data.user.email;
+                userData.phone = data.user.phone;
+                localStorage.setItem('rmn_user', JSON.stringify(userData));
+                
+                // Update profile display
+                document.getElementById('profileName').textContent = 
+                    `${data.user.firstName} ${data.user.lastName}`;
+                
+                showToast('Profile updated successfully!', 'success');
+                
+            } catch (error) {
+                console.error('Profile update error:', error);
+                showToast(error.message || 'Failed to update profile', 'error');
+            } finally {
+                saveButton.innerHTML = originalText;
+                saveButton.disabled = false;
+            }
+        });
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            loadProfileData();
+            
+            // Set up live badge pulse
+            const liveBadge = document.getElementById('liveBadge');
+            if (liveBadge) {
+                setInterval(() => {
+                    liveBadge.style.opacity = liveBadge.style.opacity === '0.5' ? '1' : '0.5';
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+</html>

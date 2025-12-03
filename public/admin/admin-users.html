@@ -1,0 +1,1673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Users - RichMore Now</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --primary-dark: #3a0ca3;
+            --secondary: #f72585;
+            --success: #4cc9f0;
+            --warning: #f9c74f;
+            --danger: #f94144;
+            --dark: #212529;
+            --light: #f8f9fa;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-400: #ced4da;
+            --gray-500: #adb5bd;
+            --gray-600: #6c757d;
+            --gray-700: #495057;
+            --gray-800: #343a40;
+            --gray-900: #212529;
+            --card-bg: #ffffff;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --border-color: #dee2e6;
+            --shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            --sidebar-width: 260px;
+            --header-height: 60px;
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] {
+            --card-bg: #2d3748;
+            --text-primary: #e2e8f0;
+            --text-secondary: #a0aec0;
+            --border-color: #4a5568;
+            --light: #1a202c;
+            --gray-100: #1a202c;
+            --gray-200: #2d3748;
+            --gray-300: #4a5568;
+            --gray-400: #718096;
+            --gray-500: #a0aec0;
+            --gray-600: #cbd5e0;
+            --gray-700: #e2e8f0;
+            --gray-800: #edf2f7;
+            --gray-900: #f7fafc;
+            --shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--light);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: var(--transition);
+            overflow-x: hidden;
+            font-size: 14px;
+        }
+
+        /* Mobile First Layout */
+        .admin-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .admin-header {
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1rem;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+
+        .menu-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+            margin-right: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .menu-toggle:hover {
+            background-color: var(--gray-200);
+        }
+
+        .header-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 85%;
+            max-width: 320px;
+            background: var(--card-bg);
+            border-right: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            z-index: 1100;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .sidebar.open {
+            transform: translateX(0);
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1090;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .logo {
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+            height: var(--header-height);
+        }
+
+        .logo h2 {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .close-sidebar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-sidebar:hover {
+            background-color: var(--gray-200);
+        }
+
+        .nav-menu {
+            padding: 1rem 0;
+            list-style: none;
+        }
+
+        .nav-item {
+            margin: 0.25rem 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+        }
+
+        .nav-link i {
+            margin-right: 0.75rem;
+            font-size: 1.1rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 1rem;
+            padding-top: calc(var(--header-height) + 1rem);
+            transition: var(--transition);
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:nth-child(2) {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+        }
+
+        .stat-card:nth-child(3) {
+            background: linear-gradient(135deg, #f39c12 0%, #d35400 100%);
+        }
+
+        .stat-card:nth-child(4) {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        }
+
+        .stats-icon {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 2rem;
+            opacity: 0.3;
+        }
+
+        .stats-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+            opacity: 0.9;
+        }
+
+        .stats-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Content Sections */
+        .content-section {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Filter Section */
+        .filter-section {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .form-control {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 0.9rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: var(--text-primary);
+            background-color: var(--card-bg);
+            background-clip: padding-box;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            transition: var(--transition);
+            min-width: 200px;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-light);
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.25);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .btn-warning {
+            background-color: var(--warning);
+            color: var(--dark);
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            min-width: 800px;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--gray-100);
+            font-weight: 600;
+            color: var(--text-secondary);
+            position: sticky;
+            top: 0;
+        }
+
+        tr:hover {
+            background-color: var(--gray-100);
+        }
+
+        /* Status Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.35em 0.65em;
+            border-radius: 50rem;
+            font-size: 0.7em;
+            font-weight: 700;
+            line-height: 1;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+        }
+
+        .badge-primary {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+        }
+
+        .badge-success {
+            background-color: rgba(76, 201, 240, 0.1);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background-color: rgba(249, 199, 79, 0.1);
+            color: var(--warning);
+        }
+
+        .badge-danger {
+            background-color: rgba(249, 65, 68, 0.1);
+            color: var(--danger);
+        }
+
+        /* Countdown Display */
+        .countdown-display {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .countdown-unit {
+            text-align: center;
+            min-width: 40px;
+        }
+
+        .countdown-number {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1;
+        }
+
+        .countdown-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .countdown-overdue .countdown-number {
+            color: #e74c3c;
+        }
+
+        .countdown-due-soon .countdown-number {
+            color: #f39c12;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* User Modal */
+        .user-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .user-modal-content {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            max-width: 800px;
+            margin: 2rem auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .user-modal-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .user-modal-body {
+            padding: 1.5rem;
+        }
+
+        .close {
+            float: right;
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 1;
+            color: white;
+            text-shadow: 0 1px 0 #fff;
+            opacity: 0.7;
+            background: transparent;
+            border: 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+
+        .close:hover {
+            opacity: 1;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* User Info Grid */
+        .user-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-section {
+            background-color: var(--gray-100);
+            border-radius: 10px;
+            padding: 1.25rem;
+        }
+
+        .info-section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-light);
+        }
+
+        .info-item {
+            margin-bottom: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .info-label {
+            font-weight: 500;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Withdrawal Modal */
+        .withdrawal-modal {
+            max-width: 600px;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 1rem 0;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary);
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+
+        .upload-area i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .receipt-preview {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .receipt-preview:hover {
+            transform: scale(1.05);
+        }
+
+        /* Loading */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            display: none;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--gray-300);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            background-color: var(--card-bg);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 1000;
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            border-left: 4px solid var(--primary);
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            border-left-color: #27ae60;
+        }
+
+        .toast.error {
+            border-left-color: #e74c3c;
+        }
+
+        .toast.warning {
+            border-left-color: #f39c12;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-section {
+                flex-direction: column;
+            }
+            
+            .form-control {
+                min-width: 100%;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .admin-container {
+                flex-direction: row;
+            }
+            
+            .sidebar {
+                position: sticky;
+                top: 0;
+                height: 100vh;
+                width: var(--sidebar-width);
+                transform: translateX(0);
+                z-index: 100;
+            }
+            
+            .sidebar-overlay {
+                display: none;
+            }
+            
+            .close-sidebar {
+                display: none;
+            }
+            
+            .main-content {
+                flex: 1;
+                padding: 1.5rem;
+                padding-top: calc(var(--header-height) + 1.5rem);
+                margin-left: 0;
+            }
+            
+            .admin-header {
+                position: sticky;
+                padding: 0 1.5rem;
+            }
+            
+            .menu-toggle {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <div class="header-left">
+                <button class="menu-toggle" id="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="header-title">Admin Dashboard</h1>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-primary" id="refresh-btn">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+        </header>
+
+        <aside class="sidebar" id="sidebar">
+            <div class="logo">
+                <h2>RichMore Now</h2>
+                <button class="close-sidebar" id="close-sidebar">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="/admin/users" class="nav-link active">
+                        <i class="fas fa-users"></i>
+                        <span>Users Management</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/payments" class="nav-link">
+                        <i class="fas fa-money-bill"></i>
+                        <span>Payments</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/withdrawals" class="nav-link">
+                        <i class="fas fa-hand-holding-usd"></i>
+                        <span>Withdrawals</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+        <main class="main-content">
+            <!-- Stats Section -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <i class="fas fa-users stats-icon"></i>
+                    <div class="stats-title">Total Users</div>
+                    <div class="stats-value" id="totalUsers">0</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-clock stats-icon"></i>
+                    <div class="stats-title">Overdue Payments</div>
+                    <div class="stats-value" id="overdueUsers">0</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-check-circle stats-icon"></i>
+                    <div class="stats-title">Eligible for Withdrawal</div>
+                    <div class="stats-value" id="eligibleUsers">0</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-receipt stats-icon"></i>
+                    <div class="stats-title">Pending Receipts</div>
+                    <div class="stats-value" id="pendingReceipts">0</div>
+                </div>
+            </div>
+
+            <!-- Users Section -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">Users Management</h2>
+                    <div class="filter-section">
+                        <select id="user-filter" class="form-control">
+                            <option value="all">All Users</option>
+                            <option value="eligible">Eligible for Withdrawal</option>
+                            <option value="overdue">Overdue Payments</option>
+                            <option value="pending_receipts">Pending Receipts</option>
+                        </select>
+                        <input type="text" id="user-search" class="form-control" placeholder="Search users...">
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table id="users-table">
+                        <thead>
+                            <tr>
+                                <th>User Info</th>
+                                <th>Next Payment</th>
+                                <th>Countdown</th>
+                                <th>Status</th>
+                                <th>Eligible</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body">
+                            <!-- Users will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination" id="pagination" style="margin-top: 1rem; display: flex; justify-content: center; gap: 0.5rem;">
+                    <!-- Pagination will be loaded here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- User Details Modal -->
+    <div id="userModal" class="user-modal">
+        <div class="user-modal-content">
+            <div class="user-modal-header">
+                <h3 class="user-modal-title">User Details</h3>
+                <button class="close" onclick="closeUserModal()">&times;</button>
+            </div>
+            <div class="user-modal-body" id="userModalContent">
+                <!-- Content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdrawal Modal -->
+    <div id="withdrawalModal" class="user-modal">
+        <div class="user-modal-content withdrawal-modal">
+            <div class="user-modal-header">
+                <h3 class="user-modal-title">Process Withdrawal</h3>
+                <button class="close" onclick="closeWithdrawalModal()">&times;</button>
+            </div>
+            <div class="user-modal-body" id="withdrawalModalContent">
+                <!-- Content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        // State management
+        let currentPage = 1;
+        let totalPages = 1;
+        let currentFilter = 'all';
+        let currentSearch = '';
+        let socket = null;
+        let usersData = [];
+
+        // DOM Elements
+        const menuToggle = document.getElementById('menu-toggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        const closeSidebar = document.getElementById('close-sidebar');
+        const refreshBtn = document.getElementById('refresh-btn');
+        const userFilter = document.getElementById('user-filter');
+        const userSearch = document.getElementById('user-search');
+        const usersTableBody = document.getElementById('users-table-body');
+        const pagination = document.getElementById('pagination');
+
+        // Stats elements
+        const totalUsersEl = document.getElementById('totalUsers');
+        const overdueUsersEl = document.getElementById('overdueUsers');
+        const eligibleUsersEl = document.getElementById('eligibleUsers');
+        const pendingReceiptsEl = document.getElementById('pendingReceipts');
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initSocket();
+            setupEventListeners();
+            loadDashboardStats();
+            loadUsers();
+        });
+
+        // Initialize Socket.IO
+        function initSocket() {
+            socket = io();
+            
+            socket.on('connect', () => {
+                console.log('Connected to WebSocket');
+                socket.emit('join-admin-room');
+                showToast('Connected to live updates', 'success');
+            });
+            
+            socket.on('disconnect', () => {
+                console.log('Disconnected from WebSocket');
+                showToast('Disconnected from server', 'error');
+            });
+            
+            socket.on('usersUpdate', () => {
+                console.log('Users updated via WebSocket');
+                loadDashboardStats();
+                loadUsers();
+            });
+            
+            socket.on('adminNotification', (notification) => {
+                showToast(notification.message, notification.type || 'info');
+            });
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Sidebar toggle
+            menuToggle.addEventListener('click', () => {
+                sidebar.classList.add('open');
+                sidebarOverlay.classList.add('open');
+            });
+            
+            closeSidebar.addEventListener('click', () => {
+                sidebar.classList.remove('open');
+                sidebarOverlay.classList.remove('open');
+            });
+            
+            sidebarOverlay.addEventListener('click', () => {
+                sidebar.classList.remove('open');
+                sidebarOverlay.classList.remove('open');
+            });
+            
+            // Refresh button
+            refreshBtn.addEventListener('click', () => {
+                loadDashboardStats();
+                loadUsers();
+                showToast('Refreshing data...', 'info');
+            });
+            
+            // Filter change
+            userFilter.addEventListener('change', () => {
+                currentFilter = userFilter.value;
+                currentPage = 1;
+                loadUsers();
+            });
+            
+            // Search input
+            userSearch.addEventListener('input', debounce(() => {
+                currentSearch = userSearch.value;
+                currentPage = 1;
+                loadUsers();
+            }, 500));
+            
+            // Close modals when clicking outside
+            window.addEventListener('click', (event) => {
+                if (event.target.classList.contains('user-modal')) {
+                    closeUserModal();
+                    closeWithdrawalModal();
+                }
+            });
+        }
+
+        // Debounce function
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Load dashboard stats
+        async function loadDashboardStats() {
+            try {
+                const response = await fetch('/api/admin/dashboard');
+                if (!response.ok) throw new Error('Failed to load stats');
+                
+                const data = await response.json();
+                const stats = data.stats;
+                
+                totalUsersEl.textContent = stats.totalUsers;
+                overdueUsersEl.textContent = stats.overdueUsers;
+                eligibleUsersEl.textContent = stats.eligibleForWithdrawal;
+                pendingReceiptsEl.textContent = stats.pendingReceipts;
+                
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        // Load users
+        async function loadUsers() {
+            try {
+                showLoading(true);
+                
+                const response = await fetch(`/api/admin/users?page=${currentPage}&limit=20&filter=${currentFilter}&search=${currentSearch}`);
+                if (!response.ok) throw new Error('Failed to load users');
+                
+                const data = await response.json();
+                usersData = data.users;
+                totalPages = Math.ceil(data.total / 20);
+                
+                renderUsersTable();
+                renderPagination();
+                
+            } catch (error) {
+                console.error('Error loading users:', error);
+                showToast('Failed to load users: ' + error.message, 'error');
+                usersTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 2rem;">
+                            <i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: var(--danger); margin-bottom: 1rem;"></i>
+                            <div>Error loading users. Please try again.</div>
+                        </td>
+                    </tr>
+                `;
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Render users table
+        function renderUsersTable() {
+            if (!usersData || usersData.length === 0) {
+                usersTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 3rem;">
+                            <div class="empty-state">
+                                <i class="fas fa-users-slash"></i>
+                                <h3>No Users Found</h3>
+                                <p>Try changing your search or filter criteria</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            usersTableBody.innerHTML = '';
+            
+            usersData.forEach(user => {
+                const row = document.createElement('tr');
+                row.className = 'user-row';
+                
+                // Get status
+                let statusClass = 'badge-success';
+                let statusText = 'Active';
+                if (user.isPaymentOverdue) {
+                    statusClass = 'badge-danger';
+                    statusText = 'Overdue';
+                } else if (user.countdown && user.countdown.days <= 3 && user.countdown.days >= 0) {
+                    statusClass = 'badge-warning';
+                    statusText = 'Due Soon';
+                }
+                
+                // Countdown display
+                let countdownHtml = 'N/A';
+                if (user.countdown) {
+                    const countdownClass = user.countdown.isOverdue ? 'countdown-overdue' : 
+                                         user.countdown.days <= 3 ? 'countdown-due-soon' : '';
+                    
+                    countdownHtml = `
+                        <div class="countdown-display ${countdownClass}">
+                            <div class="countdown-unit">
+                                <div class="countdown-number">${Math.abs(user.countdown.days)}</div>
+                                <div class="countdown-label">Days</div>
+                            </div>
+                            <div class="countdown-unit">
+                                <div class="countdown-number">${Math.abs(user.countdown.hours)}</div>
+                                <div class="countdown-label">Hours</div>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Next payment date
+                let nextPaymentHtml = 'No payments';
+                if (user.nextPaymentInfo) {
+                    const date = new Date(user.nextPaymentInfo.nextPaymentDate);
+                    nextPaymentHtml = date.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                    });
+                }
+                
+                // User initials
+                const initials = `${user.firstName?.charAt(0) || ''}${user.lastName?.charAt(0) || ''}`;
+                
+                row.innerHTML = `
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                            <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600;">
+                                ${initials}
+                            </div>
+                            <div>
+                                <div style="font-weight: 600; color: var(--primary);">
+                                    ${user.firstName} ${user.lastName}
+                                </div>
+                                <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                                    ${user.email}
+                                </div>
+                                <div style="font-size: 0.8rem; color: var(--text-secondary);">
+                                    ${user.phone}
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div style="font-weight: 500;">${nextPaymentHtml}</div>
+                    </td>
+                    <td>
+                        ${countdownHtml}
+                    </td>
+                    <td>
+                        <span class="badge ${statusClass}">${statusText}</span>
+                    </td>
+                    <td>
+                        ${user.isEligible ? 
+                            '<span class="badge badge-success"><i class="fas fa-check"></i> Eligible</span>' : 
+                            '<span class="badge badge-warning">Not Eligible</span>'
+                        }
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-sm btn-primary" onclick="viewUserDetails('${user.id}')">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            ${user.isEligible ? `
+                            <button class="btn btn-sm btn-success" onclick="processWithdrawal('${user.id}')">
+                                <i class="fas fa-hand-holding-usd"></i> Withdraw
+                            </button>
+                            ` : ''}
+                        </div>
+                    </td>
+                `;
+                
+                usersTableBody.appendChild(row);
+            });
+        }
+
+        // Render pagination
+        function renderPagination() {
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+            
+            let paginationHtml = `
+                <div style="display: flex; justify-content: center; align-items: center; gap: 0.5rem;">
+            `;
+            
+            // Previous button
+            if (currentPage > 1) {
+                paginationHtml += `
+                    <button class="btn btn-sm" onclick="changePage(${currentPage - 1})">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                `;
+            }
+            
+            // Page numbers
+            const maxVisible = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+            
+            if (endPage - startPage + 1 < maxVisible) {
+                startPage = Math.max(1, endPage - maxVisible + 1);
+            }
+            
+            for (let i = startPage; i <= endPage; i++) {
+                if (i === currentPage) {
+                    paginationHtml += `
+                        <button class="btn btn-sm btn-primary">${i}</button>
+                    `;
+                } else {
+                    paginationHtml += `
+                        <button class="btn btn-sm" onclick="changePage(${i})">${i}</button>
+                    `;
+                }
+            }
+            
+            // Next button
+            if (currentPage < totalPages) {
+                paginationHtml += `
+                    <button class="btn btn-sm" onclick="changePage(${currentPage + 1})">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                `;
+            }
+            
+            paginationHtml += `</div>`;
+            pagination.innerHTML = paginationHtml;
+        }
+
+        // Change page
+        function changePage(page) {
+            currentPage = page;
+            loadUsers();
+        }
+
+        // View user details
+        async function viewUserDetails(userId) {
+            try {
+                showLoading(true);
+                
+                const response = await fetch(`/api/admin/users/${userId}`);
+                if (!response.ok) throw new Error('Failed to load user details');
+                
+                const data = await response.json();
+                const user = data.user;
+                const stats = data.stats;
+                
+                const modalContent = document.getElementById('userModalContent');
+                modalContent.innerHTML = `
+                    <div class="user-info-grid">
+                        <div class="info-section">
+                            <div class="info-section-title">Personal Information</div>
+                            <div class="info-item">
+                                <span class="info-label">Full Name</span>
+                                <span class="info-value">${user.firstName} ${user.lastName}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Email</span>
+                                <span class="info-value">${user.email}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Phone</span>
+                                <span class="info-value">${user.phone}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">User ID</span>
+                                <span class="info-value" style="font-family: monospace;">${user.id}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Signup Date</span>
+                                <span class="info-value">${formatDateTime(user.createdAt)}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-section">
+                            <div class="info-section-title">Bank Details</div>
+                            <div class="info-item">
+                                <span class="info-label">Bank Name</span>
+                                <span class="info-value">${user.bankName || 'N/A'}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Account Name</span>
+                                <span class="info-value">${user.accountName || 'N/A'}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Account Number</span>
+                                <span class="info-value">${user.accountNumber || 'N/A'}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-section">
+                            <div class="info-section-title">Savings Stats</div>
+                            <div class="info-item">
+                                <span class="info-label">Total Saved</span>
+                                <span class="info-value">₦${stats.totalSaved?.toLocaleString() || '0'}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Months Completed</span>
+                                <span class="info-value">${stats.monthsCompleted}/6</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Eligible for Withdrawal</span>
+                                <span class="info-value">
+                                    ${stats.isEligible ? 
+                                        '<span style="color: var(--success); font-weight: 600;"><i class="fas fa-check"></i> Yes</span>' : 
+                                        '<span style="color: var(--text-secondary);">No</span>'
+                                    }
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="info-section">
+                            <div class="info-section-title">Payment Info</div>
+                            <div class="info-item">
+                                <span class="info-label">Last Payment</span>
+                                <span class="info-value">${user.lastPaymentDate ? formatDate(user.lastPaymentDate) : 'Never'}</span>
+                            </div>
+                            ${data.nextPaymentInfo ? `
+                            <div class="info-item">
+                                <span class="info-label">Next Payment Due</span>
+                                <span class="info-value">${formatDate(data.nextPaymentInfo.nextPaymentDate)}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Amount Due</span>
+                                <span class="info-value">₦${data.nextPaymentInfo.totalAmount.toLocaleString()}</span>
+                            </div>
+                            ` : ''}
+                            <div class="info-item">
+                                <span class="info-label">Overdue Status</span>
+                                <span class="info-value">
+                                    ${user.isPaymentOverdue ? 
+                                        `<span style="color: var(--danger); font-weight: 600;"><i class="fas fa-exclamation-triangle"></i> Overdue: ₦${user.overdueAmount?.toLocaleString() || '0'}</span>` : 
+                                        '<span style="color: var(--success);"><i class="fas fa-check"></i> On Track</span>'
+                                    }
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                        ${stats.isEligible ? `
+                        <button class="btn btn-success" style="flex: 1;" onclick="processWithdrawal('${user.id}')">
+                            <i class="fas fa-hand-holding-usd"></i> Process Withdrawal
+                        </button>
+                        ` : ''}
+                        <button class="btn" style="flex: 1;" onclick="closeUserModal()">
+                            <i class="fas fa-times"></i> Close
+                        </button>
+                    </div>
+                `;
+                
+                document.getElementById('userModal').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error loading user details:', error);
+                showToast('Failed to load user details: ' + error.message, 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Process withdrawal
+        function processWithdrawal(userId) {
+            const user = usersData.find(u => u.id === userId);
+            if (!user) {
+                showToast('User not found', 'error');
+                return;
+            }
+            
+            const modalContent = document.getElementById('withdrawalModalContent');
+            modalContent.innerHTML = `
+                <div class="info-section">
+                    <div class="info-section-title">Process Withdrawal for ${user.firstName} ${user.lastName}</div>
+                    <div class="info-item">
+                        <span class="info-label">Email</span>
+                        <span class="info-value">${user.email}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Phone</span>
+                        <span class="info-value">${user.phone}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Account Number</span>
+                        <span class="info-value">${user.accountNumber}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Bank Name</span>
+                        <span class="info-value">${user.bankName}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Account Name</span>
+                        <span class="info-value">${user.accountName}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Total Saved</span>
+                        <span class="info-value" style="color: var(--primary); font-weight: 700;">
+                            ₦${(user.totalSaved || 0).toLocaleString()}
+                        </span>
+                    </div>
+                </div>
+                
+                <div style="margin: 1.5rem 0;">
+                    <div class="info-section-title">Upload Receipt</div>
+                    <div id="uploadArea" class="upload-area" onclick="document.getElementById('receiptFile').click()">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <div style="font-weight: 600; margin-bottom: 0.5rem;">Click to upload receipt</div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem;">
+                            Upload proof of payment (JPG, PNG, PDF)
+                        </div>
+                    </div>
+                    
+                    <input type="file" id="receiptFile" style="display: none;" 
+                           accept="image/*,.pdf" 
+                           onchange="previewReceipt(this)">
+                    
+                    <div id="filePreview" style="display: none; margin: 1rem 0;"></div>
+                    
+                    <div style="margin: 1.5rem 0;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Message to User (Optional)</label>
+                        <textarea id="receiptMessage" class="form-control" rows="3" placeholder="Add a message for the user about this receipt..."></textarea>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 1rem;">
+                    <button class="btn btn-success" style="flex: 1;" onclick="submitWithdrawal('${userId}')" id="submitWithdrawalBtn">
+                        <i class="fas fa-check"></i> Process Withdrawal
+                    </button>
+                    <button class="btn" style="flex: 1;" onclick="closeWithdrawalModal()">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            `;
+            
+            document.getElementById('withdrawalModal').style.display = 'block';
+        }
+
+        // Preview receipt
+        function previewReceipt(input) {
+            const file = input.files[0];
+            const preview = document.getElementById('filePreview');
+            const uploadArea = document.getElementById('uploadArea');
+            
+            if (!file) return;
+            
+            uploadArea.style.display = 'none';
+            preview.style.display = 'block';
+            
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    preview.innerHTML = `
+                        <div style="text-align: center;">
+                            <img src="${e.target.result}" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px solid var(--border-color);">
+                            <div style="margin-top: 1rem; color: var(--text-secondary);">
+                                ${file.name} (${(file.size / 1024).toFixed(1)} KB)
+                            </div>
+                        </div>
+                    `;
+                };
+                reader.readAsDataURL(file);
+            } else if (file.type === 'application/pdf') {
+                preview.innerHTML = `
+                    <div style="text-align: center; padding: 2rem;">
+                        <i class="fas fa-file-pdf" style="font-size: 3rem; color: var(--danger);"></i>
+                        <div style="margin-top: 1rem; color: var(--text-secondary);">
+                            ${file.name} (${(file.size / 1024).toFixed(1)} KB)
+                        </div>
+                        <div style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.5rem;">
+                            PDF file selected
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Submit withdrawal
+        async function submitWithdrawal(userId) {
+            const fileInput = document.getElementById('receiptFile');
+            const message = document.getElementById('receiptMessage').value;
+            const submitBtn = document.getElementById('submitWithdrawalBtn');
+            
+            if (!fileInput.files[0]) {
+                showToast('Please select a receipt file first', 'error');
+                return;
+            }
+            
+            try {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                
+                // Convert file to base64
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = async (e) => {
+                    try {
+                        const base64Data = e.target.result;
+                        
+                        const response = await fetch('/api/admin/withdrawals/process', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                userId: userId,
+                                receiptImage: base64Data,
+                                message: message
+                            })
+                        });
+                        
+                        if (!response.ok) {
+                            const error = await response.json();
+                            throw new Error(error.error || 'Failed to process withdrawal');
+                        }
+                        
+                        const result = await response.json();
+                        
+                        showToast('Withdrawal processed successfully!', 'success');
+                        closeWithdrawalModal();
+                        closeUserModal();
+                        
+                        // Refresh data
+                        loadDashboardStats();
+                        loadUsers();
+                        
+                    } catch (error) {
+                        console.error('Error processing withdrawal:', error);
+                        showToast('Failed to process withdrawal: ' + error.message, 'error');
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="fas fa-check"></i> Process Withdrawal';
+                    }
+                };
+                
+                reader.onerror = () => {
+                    throw new Error('Failed to read file');
+                };
+                
+                reader.readAsDataURL(file);
+                
+            } catch (error) {
+                console.error('Error submitting withdrawal:', error);
+                showToast(error.message, 'error');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-check"></i> Process Withdrawal';
+            }
+        }
+
+        // Close modals
+        function closeUserModal() {
+            document.getElementById('userModal').style.display = 'none';
+        }
+
+        function closeWithdrawalModal() {
+            document.getElementById('withdrawalModal').style.display = 'none';
+            // Reset file input
+            const fileInput = document.getElementById('receiptFile');
+            if (fileInput) fileInput.value = '';
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+        }
+
+        // Format date with time
+        function formatDateTime(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Show loading
+        function showLoading(show) {
+            document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none';
+        }
+
+        // Show toast
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <i class="fas ${
+                    type === 'success' ? 'fa-check-circle' :
+                    type === 'error' ? 'fa-exclamation-circle' :
+                    type === 'warning' ? 'fa-exclamation-triangle' :
+                    'fa-info-circle'
+                }"></i>
+                <span>${message}</span>
+            `;
+            
+            document.getElementById('toastContainer').appendChild(toast);
+            
+            // Show toast
+            setTimeout(() => toast.classList.add('show'), 10);
+            
+            // Hide and remove after 5 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 5000);
+        }
+
+        // Make functions globally available
+        window.viewUserDetails = viewUserDetails;
+        window.closeUserModal = closeUserModal;
+        window.closeWithdrawalModal = closeWithdrawalModal;
+        window.processWithdrawal = processWithdrawal;
+        window.previewReceipt = previewReceipt;
+        window.submitWithdrawal = submitWithdrawal;
+        window.changePage = changePage;
+    </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "appName": "Rich More Now",
+  "companyBankDetails": {
+    "bankName": "ecobank",
+    "accountNumber": "2740050371",
+    "accountName": "Richmore multistream business network"
+  },
+  "monthlyPaymentAmount": 12000,
+  "withdrawalProcessingFee": 500,
+  "referralBonus": 2000,
+  "adminEmails": ["admin@richmorenow.com"]
+}

@@ -291,6 +291,7 @@
             color: var(--primary-color);
         }
         /* Top Logo Banner for Signup */
+./* Top Logo Banner Styling */
 .top-logo-banner {
     background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
     padding: 12px 0;
@@ -312,6 +313,9 @@
     justify-content: center;
     align-items: center;
     height: 50px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
 .top-logo-banner img {
@@ -319,12 +323,67 @@
     width: auto;
     max-width: 100%;
     object-fit: contain;
-    filter: brightness(0) invert(1);
+    transition: all 0.3s ease;
+}
+
+/* Hover effect for logo */
+.top-logo-banner a:hover img {
+    transform: scale(1.05);
+    opacity: 0.9;
 }
 
 /* Adjust signup section padding for banner */
 .signup-section {
-    padding-top: 180px; /* Increased to accommodate both banners */
+    padding-top: 180px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .top-logo-banner {
+        padding: 10px 0;
+    }
+    
+    .top-logo-banner .container {
+        height: 45px;
+        padding: 0 15px;
+    }
+    
+    .top-logo-banner img {
+        height: 30px;
+    }
+    
+    .signup-section {
+        padding-top: 160px;
+    }
+}
+
+@media (max-width: 480px) {
+    .top-logo-banner .container {
+        height: 40px;
+    }
+    
+    .top-logo-banner img {
+        height: 25px;
+    }
+    
+    .signup-section {
+        padding-top: 150px;
+    }
+}
+
+/* Optional: Add loading state */
+.top-logo-banner img {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.top-logo-banner img.loading {
+    opacity: 0.5;
+}
+
+/* Optional: Add active state for current page */
+.top-logo-banner.active {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
 }
     </style>
 </head>

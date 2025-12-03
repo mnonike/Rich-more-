@@ -1,0 +1,21 @@
+{
+  "name": "rich more",
+  "version": "1.0.0",
+  "main": "server.js",
+  "description": "A web service deployed on Railway",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "cors": "^2.8.5",
+    "express-fileupload": "^1.5.2",
+    "socket.io": "^4.8.1"
+  },
+  "keywords": ["railway", "express", "socket.io"],
+  "author": "Marvellous",
+  "license": "MIT"
+}

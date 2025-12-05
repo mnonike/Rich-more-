@@ -1351,10 +1351,6 @@ app.get('/admin/payments', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin', 'admin-payments.html'));
 });
 
-app.get('/admin/withdrawals', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'admin', 'admin-withdrawal.html'));
-});
-
 app.get('/admin/users', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin', 'admin-users.html'));
 });
